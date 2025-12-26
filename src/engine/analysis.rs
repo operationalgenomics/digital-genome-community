@@ -1,10 +1,9 @@
 use uuid::Uuid;
 use chrono::Utc;
 use std::collections::HashMap;
-use crate::core::identifiers::{ModelId, ContextSignature, ActionId};
+use crate::core::identifiers::{ModelId, ContextSignature, ActionId, DnaId};
 use crate::core::types::{ObservedAction, GoldenDna};
 use super::records::EvaluationRecord;
-use super::traits::MemoryReader;
 
 /// Represents a versioned mathematical model for evaluation.
 pub struct EvaluationModel {
@@ -39,15 +38,12 @@ impl AnalysisEngine {
         model: &EvaluationModel
     ) -> EvaluationRecord {
         
-        // Simplified Logic for MVP:
-        // Score = (Payload presence check) * (Context weights)
-        // In real impl, this calls the 4 Motors.
-        
+        // MVP Logic: Score based on payload presence and context
+        // This is a placeholder for the full 4-Motor calculation
         let base_score = if !action.payload.is_null() { 1.0 } else { 0.0 };
-        // Fake calculation using context vector magnitude
         let context_score: f64 = action.context_vector.values().sum();
         
-        let final_score = base_score * context_score; // Non-compensatory logic placeholder
+        let final_score = base_score * context_score;
 
         EvaluationRecord {
             decision_id: Uuid::new_v4(),
@@ -60,7 +56,6 @@ impl AnalysisEngine {
     }
 
     /// Selects the best Golden DNA for a given context.
-    /// (MVP: Returns the one with highest score from a provided list).
     pub fn select_golden(
         candidates: Vec<&GoldenDna>,
         _context: ContextSignature
