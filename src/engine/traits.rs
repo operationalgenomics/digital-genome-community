@@ -1,7 +1,6 @@
-use uuid::Uuid;
-use crate::core::identifiers::{ActionId, DnaId, TruthId};
+use crate::core::identifiers::{ActionId, DnaId};
 use crate::core::types::{ObservedAction, GoldenDna};
-// Note: We use fully qualified paths to avoid circular deps or ambiguity
+use crate::memory::provenance::TruthId;
 
 /// Interface for reading historical data without coupling to storage implementation.
 pub trait MemoryReader {
