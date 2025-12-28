@@ -1,5 +1,4 @@
 use digital_genome_community::topology::network::{CognitiveNetwork, OntogenesisState};
-use digital_genome_community::topology::nodes::Neuron;
 use digital_genome_community::topology::connections::Synapse;
 use digital_genome_community::core::identifiers::DnaId;
 use uuid::Uuid;

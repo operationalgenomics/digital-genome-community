@@ -1,7 +1,7 @@
 use uuid::Uuid;
 use chrono::Utc;
 use std::collections::HashMap;
-use crate::core::identifiers::{ModelId, ContextSignature, ActionId, DnaId};
+use crate::core::identifiers::{ModelId, ContextSignature, DnaId};
 use crate::core::types::{ObservedAction, GoldenDna};
 use super::records::EvaluationRecord;
 

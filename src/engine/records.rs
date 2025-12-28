@@ -1,7 +1,7 @@
 use serde::{Serialize, Deserialize};
 use uuid::Uuid;
 use chrono::{DateTime, Utc};
-use crate::core::identifiers::{ActionId, DnaId, ModelId};
+use crate::core::identifiers::{DnaId, ModelId};
 
 /// Audit record for a CRISPR mutation operation.
 #[derive(Debug, Clone, Serialize, Deserialize)]
