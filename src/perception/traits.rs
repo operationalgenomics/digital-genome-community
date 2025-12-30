@@ -4,14 +4,14 @@
 //! Title: Canonical Perception Traits
 //! Author: Carlos Eduardo Favini
 //! Date: 2025-12-30
-//! Version: 1.0.0
+//! Version: 1.0.1
 //! Description: Defines pure synchronous contracts for signal acquisition and
 //!              human interaction. Implementations reside in Enterprise.
 //! Layer: Community / Perception (Phase 1)
 //! --------------------------
 
 use thiserror::Error;
-use crate::perception::types::{RawPhenomenon, ApprovalStatus};
+use crate::perception::types::RawPhenomenon;
 
 /// Error types related to perception interface failures.
 #[derive(Debug, Error)]
