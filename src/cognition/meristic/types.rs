@@ -4,11 +4,11 @@
 //! Title: Meristic Types (M_M)
 //! Author: Carlos Eduardo Favini
 //! Date: 2025-12-30
-//! Version: 1.1.0
+//! Version: 1.1.1
 //! Description: Defines vocabulary for the Canonical Meristic Meta-Motor (M_M).
 //!              Strictly structural and deterministic.
-//!              No natural language or semantic interpretation allowed.
-//!              Uses Uuid for identification and u64 for scaling.
+//!              Updated to make identification fields optional to support
+//!              initial migration phases where IDs are not yet propagated.
 //! Layer: Community
 //! Dependencies: serde, uuid
 //! Affected Components: cognition::meristic::motor
@@ -16,6 +16,7 @@
 //! --------------------------
 //! CHANGE LOG
 //! --------------------------
+//! 2025-12-30 - HOTFIX: Made variant_id and target_id optional (Option<Uuid>).
 //! 2025-12-30 - Removed natural language and semantic enums (Strict Structuralism).
 //! 2025-12-30 - Migrated to Community with MERISTIC_SCALE.
 //! --------------------------
@@ -36,7 +37,6 @@ pub enum PatternScale {
 }
 
 /// A structural metric triggering the hypothesis generation.
-/// Replaces semantic "HypothesisSource".
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum StructuralTrigger {
     EntropyDelta(u64),
@@ -46,7 +46,6 @@ pub enum StructuralTrigger {
 }
 
 /// A condition required to verify a hypothesis structurally.
-/// Replaces semantic "TestCondition".
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum VerificationConstraint {
     SampleCount(u64),
@@ -55,11 +54,11 @@ pub enum VerificationConstraint {
 }
 
 /// A proposed alternative structural variant.
-/// Description strings are replaced by unique IDs for Enterprise lookup.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct VariantHypothesis {
     /// Unique identifier for this structural variant.
-    pub variant_id: Uuid,
+    /// Optional during initial migration phases.
+    pub variant_id: Option<Uuid>,
     
     pub scale: PatternScale,
     
@@ -73,11 +72,11 @@ pub struct VariantHypothesis {
 }
 
 /// A hypothesis generated to explain a structural anomaly.
-/// Replaces "InterpretationHypothesis" with strictly structural data.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct StructuralHypothesis {
     /// ID linking to the target signal or anomaly.
-    pub target_id: Uuid,
+    /// Optional during initial migration phases.
+    pub target_id: Option<Uuid>,
     
     /// Estimated plausibility scaled by MERISTIC_SCALE.
     pub plausibility: u64,
