@@ -1,7 +1,15 @@
-//! # Digital Genome: Community Edition
-//! 
-//! The open-source cognitive core of the Digital Genome project.
-//! 
+//! --------------------------
+//! INFORMATION
+//! --------------------------
+//! Title: Digital Genome Community Library
+//! Author: Carlos Eduardo Favini
+//! Date: 2025-12-30
+//! Version: 1.0.0
+//! Description: The open-source cognitive core of the Digital Genome project.
+//!              Defines the immutable laws of perception and cognition.
+//! Layer: Community Root
+//! --------------------------
+
 //! ## Architecture (Canonical)
 //! 
 //! The system is divided into neutral zones:
