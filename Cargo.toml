@@ -1,31 +1,38 @@
 [package]
 name = "digital-genome-community"
-version = "1.0.0"
+version = "0.1.1"
 edition = "2021"
-description = "The Canonical Core of the Digital Genome: A Cognitive Architecture for Industrial AI."
-authors = ["Digital Genome Community <core@digitalgenome.org>"]
+authors = ["Carlos Eduardo Favini"]
 license = "Apache-2.0"
-readme = "README.md"
-
-[lib]
-name = "digital_genome_community"
-path = "src/lib.rs"
+description = "Digital Genome Community Edition - Synthetic cognitive core for Industry 5.0"
+repository = "https://github.com/operationalgenomics/digital-genome-community"
+keywords = ["cognitive", "industry-5.0", "digital-genome", "synthetic-cognition"]
+categories = ["science", "algorithms"]
 
 [dependencies]
-# --- CORE TYPES & SERIALIZATION ---
+uuid = { version = "1.0", features = ["v4", "v5", "serde"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-
-# --- IDENTIFIERS & TIME ---
-uuid = { version = "1.0", features = ["v4", "serde"] }
-chrono = { version = "0.4", features = ["serde"] }
-
-# --- INTEGRITY & CRYPTO ---
 sha2 = "0.10"
 hex = "0.4"
+rustfft = "6.1"
 
-# --- ERROR HANDLING ---
-thiserror = "1.0"
+# CLI and parallel processing (optional, for binary)
+clap = { version = "4.4", features = ["derive"], optional = true }
+indicatif = { version = "0.17", optional = true }
+crossbeam-channel = { version = "0.5", optional = true }
+dashmap = { version = "5.5", optional = true }
+num_cpus = { version = "1.16", optional = true }
 
 [dev-dependencies]
-criterion = "0.5"
+# Testing dependencies will be added as needed
+
+[features]
+default = []
+validation = []  # Feature flag for validation harness
+cli = ["clap", "indicatif", "crossbeam-channel", "dashmap", "num_cpus"]  # CLI binary
+
+[[bin]]
+name = "digital-genome"
+path = "src/main.rs"
+required-features = ["cli"]
