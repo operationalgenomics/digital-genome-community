@@ -37,6 +37,14 @@ Determinism fixes to resolve canonical validation failures (DET-001, DET-005, DE
 - ✅ DET-006: Large input (100KB) deterministic ✓
 - ✅ NUM-004: Distributions distinguished ✓
 
+### Known Issues (Backlog)
+
+| ID | Issue | Severity | Blocks |
+|----|-------|----------|--------|
+| L-011 | CAT-3 Real-World Datasets causes OOM (Killed) | CRITICAL | v1.0.0 |
+
+**L-011 Details:** Processing large real-world files triggers Out-of-Memory termination. Requires streaming/chunking implementation before v1.0.0 release.
+
 ### Technical Notes
 
 **Determinism Specification (Canon):**
