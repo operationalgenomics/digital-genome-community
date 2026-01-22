@@ -72,6 +72,10 @@ pub struct CommunityOutput {
     /// M_N: Nash Motor score
     pub motor_nash: f64,
 
+    /// Whether Nash motor was applicable (≥2 players detected)
+    /// When false, motor_nash = 1.0 (neutral) and excluded from CP calculation
+    pub nash_applicable: bool,
+
     /// M_C: Chaos Motor score
     pub motor_chaos: f64,
 
@@ -121,6 +125,7 @@ impl CommunityOutput {
         cp_result: &CpResult,
         motor_praxis: f64,
         motor_nash: f64,
+        nash_applicable: bool,
         motor_chaos: f64,
         motor_meristic: f64,
         perceptual_state: PerceptualState,
@@ -153,6 +158,7 @@ impl CommunityOutput {
             calculation_clamped,
             motor_praxis,
             motor_nash,
+            nash_applicable,
             motor_chaos,
             motor_meristic,
             perceptual_state,
@@ -186,6 +192,7 @@ impl CommunityOutput {
 pub struct CommunityOutputBuilder {
     motor_praxis: f64,
     motor_nash: f64,
+    nash_applicable: bool,
     motor_chaos: f64,
     motor_meristic: f64,
     perceptual_state: PerceptualState,
@@ -201,7 +208,8 @@ impl CommunityOutputBuilder {
     pub fn new() -> Self {
         Self {
             motor_praxis: 0.0,
-            motor_nash: 0.0,
+            motor_nash: 1.0, // Default neutral (Nash not applicable)
+            nash_applicable: false,
             motor_chaos: 0.0,
             motor_meristic: 0.0,
             perceptual_state: PerceptualState::Listening,
@@ -213,10 +221,21 @@ impl CommunityOutputBuilder {
         }
     }
 
-    /// Sets motor scores
+    /// Sets motor scores (Nash applicable by default when set via this method)
     pub fn motors(mut self, praxis: f64, nash: f64, chaos: f64, meristic: f64) -> Self {
         self.motor_praxis = praxis;
         self.motor_nash = nash;
+        self.nash_applicable = true; // If setting Nash score, it's applicable
+        self.motor_chaos = chaos;
+        self.motor_meristic = meristic;
+        self
+    }
+
+    /// Sets motor scores with explicit Nash applicability
+    pub fn motors_with_nash_flag(mut self, praxis: f64, nash: f64, nash_applicable: bool, chaos: f64, meristic: f64) -> Self {
+        self.motor_praxis = praxis;
+        self.motor_nash = if nash_applicable { nash } else { 1.0 }; // Neutral if not applicable
+        self.nash_applicable = nash_applicable;
         self.motor_chaos = chaos;
         self.motor_meristic = meristic;
         self
@@ -264,6 +283,7 @@ impl CommunityOutputBuilder {
             cp_result,
             self.motor_praxis,
             self.motor_nash,
+            self.nash_applicable,
             self.motor_chaos,
             self.motor_meristic,
             self.perceptual_state,

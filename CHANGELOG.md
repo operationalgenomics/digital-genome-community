@@ -8,6 +8,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.2.0] - 2025-01-21 - MVP-1: Nash Condicional
+
+### Summary
+
+Implementation of L-001 (Nash Conditional). Nash motor now reports applicability and uses neutral value (1.0) when fewer than 2 players are detected.
+
+### Added
+
+| Feature | Description |
+|---------|-------------|
+| `nash_applicable` field | Boolean flag in `CommunityOutput` indicating if Nash was applied |
+| `motors_with_nash_flag()` | Builder method for explicit Nash applicability control |
+
+### Changed
+
+- **Nash Motor Logic**: When `nash_applicable = false`, `motor_nash = 1.0` (neutral)
+- **CP Formula**: Unchanged mathematically, but Nash=1.0 effectively excludes it from product
+- **Builder default**: Nash defaults to `1.0` with `nash_applicable = false`
+
+### Formula
+
+```
+When ≥2 players: CP = M_P × M_N × M_C × M_M (nash_applicable = true)
+When <2 players: CP = M_P × 1.0 × M_C × M_M (nash_applicable = false)
+```
+
+### Validation
+
+- ✅ All 195 unit tests passing
+- ✅ All 35 integration tests passing
+- ✅ All 44 canonical tests passing
+
+---
+
 ## [0.1.1] - 2025-01-21 - Gate 0 Complete
 
 ### Summary
