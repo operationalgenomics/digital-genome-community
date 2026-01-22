@@ -113,6 +113,9 @@ pub mod maturation;
 /// Cognitive communication structures (L-003, L-004, L-008)
 pub mod cognitive;
 
+/// Universal Notation Language and GD-QMN (L-009)
+pub mod unl;
+
 // =============================================================================
 // RE-EXPORTS
 // =============================================================================

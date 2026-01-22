@@ -8,6 +8,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.4.0] - 2025-01-21 - MVP-3: UNL/GD-QMN + GDO Emulator
+
+### Added
+
+- `unl` module:
+  - `UnlSpec`: Formal specification (rules, invariants)
+  - `GdQmn`: Code point struct
+  - `Profile`: Compact(64), Standard(128), Extended(256)
+  - `Family`: F1-F6 code families
+  - Profiles: CompactCode, StandardCode, ExtendedCode
+  - Families: f1-f6 with core opcodes
+  - `GdoEmulator`: Basic observer for testing
+  - `PerceptualFrame`: Framed perception with BOF/EOF
+
+### Tests
+
+- 208 unit tests passing
+
+---
+
 ## [0.3.0] - 2025-01-21 - MVP-2: Communication Structures
 
 ### Added
