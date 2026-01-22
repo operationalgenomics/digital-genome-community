@@ -110,6 +110,9 @@ pub mod budget;
 /// - Maturation IS discarded entirely at the end
 pub mod maturation;
 
+/// Cognitive communication structures (L-003, L-004, L-008)
+pub mod cognitive;
+
 // =============================================================================
 // RE-EXPORTS
 // =============================================================================

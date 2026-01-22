@@ -8,6 +8,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.3.0] - 2025-01-21 - MVP-2: Communication Structures
+
+### Added
+
+- `cognitive` module with:
+  - `ObservationReport`: Technical certificate (5 fields per L-004)
+  - `MotorSignatures`: Motor vector hashes
+  - `TransportCode`: BOF/EOF family (L-008)
+
+### Documentation
+
+- PerceptualFrame: Lives in GDO, not GDC (L-003)
+
+---
+
 ## [0.2.0] - 2025-01-21 - MVP-1: Nash Condicional
 
 ### Summary
