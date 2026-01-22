@@ -79,6 +79,17 @@ Determinism fixes to resolve canonical validation failures (DET-001, DET-005, DE
 
 **L-011 Details:** Processing large real-world files triggers Out-of-Memory termination. Requires streaming/chunking implementation before v1.0.0 release.
 
+**L-011 Resolution Plan:**
+- CAT-3 tests DISABLED until resolution
+- Will be resolved AFTER GD-QMN + GDO Emulator phase (MVP-3)
+- New phase "MVP-3.5: Streaming/Chunking" inserted before v1.0.0
+- Blocker for v1.0.0 release
+
+**Roadmap Update:**
+```
+MVP-3 (GD-QMN + UNL) → MVP-3.5 (L-011 Fix) → MVP-4 → MVP-5 → v1.0.0
+```
+
 ### Technical Notes
 
 **Determinism Specification (Canon):**

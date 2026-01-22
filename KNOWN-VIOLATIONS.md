@@ -44,6 +44,41 @@ Este documento lista violações conhecidas do contrato canônico. A honestidade
 
 ---
 
+## BLOQUEADORES PARA v1.0.0
+
+### L-011: OOM em Datasets Reais (CAT-3)
+
+**Status:** 🔴 CRÍTICO — BLOQUEADOR  
+**Descoberto:** v0.1.1  
+**CAT-3:** DESABILITADO até resolução
+
+**Sintoma:**
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│ CAT-3: REAL-WORLD DATASETS                              [CRITICAL]
+└─────────────────────────────────────────────────────────────────────┘
+Killed
+```
+
+**Causa:** Alocação de memória sem limite ao processar arquivos grandes.
+
+**Impacto:** Sistema mata o processo (OOM Killer) antes de completar validação.
+
+**Plano de Resolução:**
+1. Implementar streaming/chunking para arquivos grandes
+2. Adicionar limite de memória por operação
+3. Fragmentar processamento em janelas deslizantes
+4. Re-habilitar CAT-3 após implementação
+
+**Fase:** MVP-3.5 (após GD-QMN + GDO Emulator)
+
+**Roadmap:**
+```
+MVP-3 → MVP-3.5 (L-011) → MVP-4 → MVP-5 → v1.0.0
+```
+
+---
+
 ## PENDENTES PARA v2.0.0+
 
 ### V018: Fórmulas Não Validadas Academicamente

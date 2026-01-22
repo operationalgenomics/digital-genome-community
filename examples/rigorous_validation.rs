@@ -20,8 +20,8 @@ use digital_genome_community::{
 fn main() {
     println!("╔══════════════════════════════════════════════════════════════════╗");
     println!("║   DIGITAL GENOME COMMUNITY EDITION - RIGOROUS VALIDATION         ║");
-    println!("║   Version: 0.1.0-rc1                                             ║");
-    println!("║   Target: v0.1.0-RC (Adão Sintético)                             ║");
+    println!("║   Version: 0.1.0-MVP-2                                             ║");
+    println!("║   Target: v0.1.0-MVP-2 (Adão Sintético)                             ║");
     println!("╚══════════════════════════════════════════════════════════════════╝");
     println!();
 
@@ -247,7 +247,7 @@ fn main() {
     if failed == 0 {
         println!("║  STATUS: ✅ ALL VALIDATIONS PASSED                              ║");
         println!("║                                                                  ║");
-        println!("║  The Core is ready for v0.1.0-RC (Adão Sintético)               ║");
+        println!("║  The Core is ready for v0.1.0-MVP-2 (Adão Sintético)             ║");
     } else {
         println!("║  STATUS: ❌ VALIDATION FAILED                                   ║");
         println!("║                                                                  ║");

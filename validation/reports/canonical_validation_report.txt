@@ -1,7 +1,7 @@
-clearDIGITAL GENOME COMMUNITY EDITION
+DIGITAL GENOME COMMUNITY EDITION
 CANONICAL VALIDATION REPORT
 Document: DGC-CVP-2025-001
-Generated: SystemTime { tv_sec: 1769040737, tv_nsec: 426103819 }
+Generated: SystemTime { tv_sec: 1769042100, tv_nsec: 906445261 }
 
 ======================================================================
 
@@ -9,7 +9,7 @@ Test ID:     DET-001
 Category:    Determinism
 Description: 100 iterations produce identical output
 Status:      Pass
-Duration:    16757918 ns
+Duration:    14495285 ns
 Input:       1000 bytes sequential
 Output:      entropy=0.9994583731
 Details:     All 100 iterations matched (after warm-up)
@@ -18,7 +18,7 @@ Test ID:     DET-002
 Category:    Determinism
 Description: Replay context produces identical IDs
 Status:      Pass
-Duration:    16877 ns
+Duration:    8950 ns
 Input:       seed: canonical-validation-seed-001
 Output:      id1=ActionId(84baf26d-cf80-59ec-b13d-79b7815b93a2), id2=ActionId(84baf26d-cf80-59ec-b13d-79b7815b93a2)
 Details:     IDs matched
@@ -27,7 +27,7 @@ Test ID:     DET-003
 Category:    Determinism
 Description: Different cortex instances produce identical output
 Status:      Pass
-Duration:    177258 ns
+Duration:    87233 ns
 Input:       500 bytes constant (42)
 Output:      entropy=0.0000000000
 Details:     Cross-instance match
@@ -36,7 +36,7 @@ Test ID:     DET-004
 Category:    Determinism
 Description: Processing order does not affect results
 Status:      Pass
-Duration:    50291 ns
+Duration:    9993 ns
 Input:       Two different inputs, different order
 Output:      Order-independent results
 Details:     Order independence verified
@@ -45,7 +45,7 @@ Test ID:     DET-005
 Category:    Determinism
 Description: Maturation produces identical results
 Status:      Pass
-Duration:    610406 ns
+Duration:    578461 ns
 Input:       500 bytes with maturation
 Output:      iterations=2, converged=true
 Details:     Maturation deterministic
@@ -54,7 +54,7 @@ Test ID:     DET-006
 Category:    Determinism
 Description: Large input (100KB) produces identical results
 Status:      Pass
-Duration:    121219364 ns
+Duration:    75076853 ns
 Input:       100,000 bytes
 Output:      entropy=0.9999998615
 Details:     Large input deterministic (after warm-up)
@@ -63,7 +63,7 @@ Test ID:     DET-007
 Category:    Determinism
 Description: Edge values (0 and 255) produce identical results
 Status:      Pass
-Duration:    290655 ns
+Duration:    204500 ns
 Input:       All 0s and all 255s
 Output:      zero_entropy=0.0000000000, max_entropy=0.0000000000
 Details:     Edge values deterministic
@@ -72,7 +72,7 @@ Test ID:     DET-008
 Category:    Determinism
 Description: Empty input produces identical results
 Status:      Pass
-Duration:    1041 ns
+Duration:    1121 ns
 Input:       0 bytes
 Output:      sample_count=0
 Details:     Empty input deterministic
@@ -81,7 +81,7 @@ Test ID:     DET-009
 Category:    Determinism
 Description: Single byte produces identical results
 Status:      Pass
-Duration:    1834 ns
+Duration:    1849 ns
 Input:       1 byte (127)
 Output:      mean=127
 Details:     Single byte deterministic
@@ -90,7 +90,7 @@ Test ID:     DET-010
 Category:    Determinism
 Description: Permutations are distinguished
 Status:      Pass
-Duration:    6746 ns
+Duration:    7979 ns
 Input:       [1,2,3,4,5] vs [5,4,3,2,1]
 Output:      mean1=3.000000000001, mean2=3.000000000005
 Details:     Permutations distinguished
@@ -99,7 +99,7 @@ Test ID:     DET-011
 Category:    Determinism
 Description: Floating point results are bit-exact
 Status:      Pass
-Duration:    3774 ns
+Duration:    5330 ns
 Input:       Edge value bytes
 Output:      entropy_bits=3fd4000000000000
 Details:     Bit-exact match
@@ -108,7 +108,7 @@ Test ID:     DET-012
 Category:    Determinism
 Description: ActionId hash is deterministic
 Status:      Pass
-Duration:    3108 ns
+Duration:    2607 ns
 Input:       seed: test-seed-canonical
 Output:      id1=ActionId(ed6367f3-a339-57ed-a564-90fdbec231ae)
 Details:     Hash deterministic
@@ -117,7 +117,7 @@ Test ID:     BND-001
 Category:    Boundary
 Description: Zero-length input handled correctly
 Status:      Pass
-Duration:    466 ns
+Duration:    915 ns
 Input:       0 bytes
 Output:      sample_count=0, entropy=0
 Details:     Empty input test
@@ -126,7 +126,7 @@ Test ID:     BND-002
 Category:    Boundary
 Description: Single byte input handled correctly
 Status:      Pass
-Duration:    685 ns
+Duration:    1545 ns
 Input:       1 byte (42)
 Output:      sample_count=1
 Details:     Single byte test
@@ -135,7 +135,7 @@ Test ID:     BND-003
 Category:    Boundary
 Description: Two-byte input handled correctly
 Status:      Pass
-Duration:    833 ns
+Duration:    1347 ns
 Input:       2 bytes [0, 255]
 Output:      mean=127.5
 Details:     Two byte test
@@ -144,7 +144,7 @@ Test ID:     BND-004
 Category:    Boundary
 Description: All-same-value input has zero entropy
 Status:      Pass
-Duration:    68575 ns
+Duration:    54473 ns
 Input:       1000 bytes of 128
 Output:      entropy=0, std_dev=0
 Details:     Constant signal test
@@ -153,7 +153,7 @@ Test ID:     BND-005
 Category:    Boundary
 Description: All-different-values input detected
 Status:      Pass
-Duration:    68789 ns
+Duration:    53240 ns
 Input:       256 unique bytes
 Output:      unique_values=256
 Details:     All unique test
@@ -162,7 +162,7 @@ Test ID:     BND-006
 Category:    Boundary
 Description: Maximum entropy correctly calculated
 Status:      Pass
-Duration:    50669 ns
+Duration:    46750 ns
 Input:       256 unique values
 Output:      entropy=1.0000000000
 Details:     Max entropy test
@@ -171,7 +171,7 @@ Test ID:     BND-007
 Category:    Boundary
 Description: Minimum entropy (constant) correctly calculated
 Status:      Pass
-Duration:    70080 ns
+Duration:    48943 ns
 Input:       1000 zeros
 Output:      entropy=0
 Details:     Min entropy test
@@ -180,7 +180,7 @@ Test ID:     BND-008
 Category:    Boundary
 Description: Budget at exact limit succeeds
 Status:      Pass
-Duration:    72350 ns
+Duration:    45879 ns
 Input:       1000 bytes, 1000 byte limit
 Output:      result=true
 Details:     Exact budget test
@@ -189,7 +189,7 @@ Test ID:     BND-009
 Category:    Boundary
 Description: Budget exceeded returns error
 Status:      Pass
-Duration:    246 ns
+Duration:    237 ns
 Input:       1000 bytes, 100 byte limit
 Output:      error=true
 Details:     Budget exceeded test
@@ -198,52 +198,61 @@ Test ID:     BND-010
 Category:    Boundary
 Description: Recursion limit enforced correctly
 Status:      Pass
-Duration:    246 ns
+Duration:    520 ns
 Input:       limit=3, attempts=4
 Output:      depth=3, 4th_failed=true
 Details:     Recursion limit test
+----------------------------------------------------------------------
+Test ID:     CAT-3
+Category:    Datasets
+Description: Real-world dataset processing
+Status:      Skip
+Duration:    0 ns
+Input:       L-011 blocker
+Output:      OOM on large files
+Details:     Disabled until streaming/chunking implementation
 ----------------------------------------------------------------------
 Test ID:     STR-001
 Category:    Stress
 Description: 10,000 rapid sequential calls
 Status:      Pass
-Duration:    10990490 ns
+Duration:    8690954 ns
 Input:       10,000 calls
-Output:      completed in 10ms
+Output:      completed in 8ms
 Details:     Rapid calls test
 ----------------------------------------------------------------------
 Test ID:     STR-002
 Category:    Stress
 Description: 1 MB input processing
 Status:      Pass
-Duration:    516789436 ns
+Duration:    283319854 ns
 Input:       1,000,000 bytes
-Output:      entropy=1.000000, time=516ms
+Output:      entropy=1.000000, time=283ms
 Details:     Large input test
 ----------------------------------------------------------------------
 Test ID:     STR-003
 Category:    Stress
 Description: 1,000 different small inputs
 Status:      Pass
-Duration:    7245727 ns
+Duration:    4848359 ns
 Input:       1,000 x 100 bytes
-Output:      completed in 7ms
+Output:      completed in 4ms
 Details:     Many small inputs test
 ----------------------------------------------------------------------
 Test ID:     STR-004
 Category:    Stress
 Description: Memory pressure (100 x 10KB)
 Status:      Pass
-Duration:    214256215 ns
+Duration:    151761183 ns
 Input:       100 x 10,000 bytes
-Output:      completed in 214ms
+Output:      completed in 151ms
 Details:     Memory pressure test
 ----------------------------------------------------------------------
 Test ID:     PROT-001
 Category:    Protocol
 Description: Basic GDE->GDC request/response
 Status:      Pass
-Duration:    21783 ns
+Duration:    11558 ns
 Input:       10 bytes
 Output:      complete_response=true
 Details:     Basic protocol test
@@ -252,7 +261,7 @@ Test ID:     PROT-002
 Category:    Protocol
 Description: Replay produces identical response
 Status:      Pass
-Duration:    6248 ns
+Duration:    3849 ns
 Input:       Same request twice
 Output:      identical=true
 Details:     Replay protocol test
@@ -261,7 +270,7 @@ Test ID:     PROT-003
 Category:    Protocol
 Description: Budget exceeded returns proper error
 Status:      Pass
-Duration:    724 ns
+Duration:    433 ns
 Input:       1000 bytes, 10 byte limit
 Output:      error_returned=true
 Details:     Budget error protocol test
@@ -270,7 +279,7 @@ Test ID:     PROT-004
 Category:    Protocol
 Description: Empty request handled gracefully
 Status:      Pass
-Duration:    879 ns
+Duration:    460 ns
 Input:       0 bytes
 Output:      sample_count=0
 Details:     Empty request protocol test
@@ -279,7 +288,7 @@ Test ID:     PROT-005
 Category:    Protocol
 Description: Maturation request returns state
 Status:      Pass
-Duration:    8477 ns
+Duration:    4621 ns
 Input:       10 bytes + maturation config
 Output:      iterations=2
 Details:     Maturation protocol test
@@ -288,7 +297,7 @@ Test ID:     PROT-006
 Category:    Protocol
 Description: State isolation between requests
 Status:      Pass
-Duration:    5169 ns
+Duration:    4515 ns
 Input:       Interleaved requests
 Output:      isolated=true
 Details:     State isolation test
@@ -297,7 +306,7 @@ Test ID:     ADV-001
 Category:    Adversarial
 Description: All zeros (10KB)
 Status:      Pass
-Duration:    1054634 ns
+Duration:    539850 ns
 Input:       10,000 x 0x00
 Output:      entropy=0, mean=0
 Details:     All zeros adversarial test
@@ -306,7 +315,7 @@ Test ID:     ADV-002
 Category:    Adversarial
 Description: All 0xFF (10KB)
 Status:      Pass
-Duration:    1115100 ns
+Duration:    638313 ns
 Input:       10,000 x 0xFF
 Output:      entropy=0, mean=255
 Details:     All ones adversarial test
@@ -315,7 +324,7 @@ Test ID:     ADV-003
 Category:    Adversarial
 Description: Alternating 0/255 pattern
 Status:      Pass
-Duration:    1685512 ns
+Duration:    804833 ns
 Input:       0,255,0,255... (10KB)
 Output:      periodicity=true
 Details:     Alternating adversarial test
@@ -324,7 +333,7 @@ Test ID:     ADV-004
 Category:    Adversarial
 Description: Pseudo-random data (10KB)
 Status:      Pass
-Duration:    3260514 ns
+Duration:    2041089 ns
 Input:       LCG random
 Output:      entropy=0.997337
 Details:     Near random adversarial test
@@ -333,7 +342,7 @@ Test ID:     ADV-005
 Category:    Adversarial
 Description: Long runs of repeated values
 Status:      Pass
-Duration:    1534205 ns
+Duration:    1008820 ns
 Input:       100 runs x 100 bytes each
 Output:      entropy=0.830482
 Details:     Long runs adversarial test
@@ -342,7 +351,7 @@ Test ID:     ADV-006
 Category:    Adversarial
 Description: Sinusoidal pattern
 Status:      Pass
-Duration:    2893049 ns
+Duration:    2219029 ns
 Input:       sin(i) * 127 + 128
 Output:      entropy=0.956662, periodicity=true
 Details:     Pathological adversarial test
@@ -351,7 +360,7 @@ Test ID:     CON-001
 Category:    Concurrency
 Description: 10 parallel cortex instances
 Status:      Pass
-Duration:    3719923 ns
+Duration:    1752969 ns
 Input:       10 threads
 Output:      completed=10
 Details:     Parallel instances test
@@ -360,7 +369,7 @@ Test ID:     CON-002
 Category:    Concurrency
 Description: Shared cortex across 10 threads
 Status:      Pass
-Duration:    1890130 ns
+Duration:    643459 ns
 Input:       Arc<SensoryCortex>
 Output:      completed=10
 Details:     Shared cortex test
@@ -369,7 +378,7 @@ Test ID:     NUM-001
 Category:    Numerical
 Description: No NaN values in outputs
 Status:      Pass
-Duration:    297702 ns
+Duration:    153939 ns
 Input:       7 edge case inputs
 Output:      nan_found=false
 Details:     NaN test
@@ -378,7 +387,7 @@ Test ID:     NUM-002
 Category:    Numerical
 Description: No Infinity values in outputs
 Status:      Pass
-Duration:    58320446 ns
+Duration:    35041105 ns
 Input:       4 large inputs
 Output:      inf_found=false
 Details:     Infinity test
@@ -387,7 +396,7 @@ Test ID:     NUM-003
 Category:    Numerical
 Description: All values within valid bounds
 Status:      Pass
-Duration:    238496 ns
+Duration:    189066 ns
 Input:       1000 bytes
 Output:      entropy=0.999458, mean=124.72, std=72.53
 Details:     Bounds test
@@ -396,7 +405,7 @@ Test ID:     NUM-004
 Category:    Numerical
 Description: Different distributions produce different stats
 Status:      Pass
-Duration:    261183 ns
+Duration:    165276 ns
 Input:       1000 bytes: uniform vs bimodal
 Output:      mean1=128.00, mean2=127.50, std1=0.82, std2=107.50
 Details:     Distributions distinguished
