@@ -8,6 +8,63 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.5.0] - 2025-01-21 - MVP-3.5: Complete Cognitive Cycle
+
+### Added
+
+- `cognitive::cycle` module:
+  - `CognitiveCycle`: Complete GDC processing (perceive → motors → CP → DNA)
+  - `CycleOutput`: Full result with motor scores, CP, DNA fingerprint
+  - `MotorScores`: All four motor evaluations
+  - `MotorContext`: Context provided by GDO for motor evaluation
+
+### Changed
+
+- GDO Emulator now executes complete cognitive cycle:
+  - Calls all 4 motors (Praxis, Nash, Chaos, Meristic)
+  - Calculates Craft Performance (CP)
+  - Generates DNA fingerprint
+  - Reports include motor signatures and DNA
+- CAT-3 now shows motor scores and DNA in output:
+  - `P=0.xx N=1.00 C=0.xx M=0.xx CP=0.xxx`
+  - `DNA=abcd1234...`
+
+### Fixed
+
+- Warnings for unused variables removed
+
+### Tests
+
+- 212 unit tests passing
+
+---
+
+## [0.4.5] - 2025-01-21 - MVP-3.5: L-011 RESOLVED
+
+### Fixed
+
+- **L-011 RESOLVED**: Large file OOM fixed via GDO framing
+
+### Changed
+
+- **Architecture correction**: Chunking is GDO responsibility, not GDC
+- GDO Emulator now handles large inputs by framing them (BOF/BOFR.../EOFR/EOF)
+- GDC remains stateless, processes frames as they arrive
+- CAT-3 re-enabled using GDO Emulator for large files
+
+### Added
+
+- `GdoEmulator::observe_stream()`: Stream-based observation for large files
+- `Observation` struct: Container for multiple frames
+- `GdoResult` struct: Aggregated results from GDO processing
+- Welford's algorithm in GDO for incremental statistics
+
+### Tests
+
+- 209 unit tests passing
+
+---
+
 ## [0.4.0] - 2025-01-21 - MVP-3: UNL/GD-QMN + GDO Emulator
 
 ### Added

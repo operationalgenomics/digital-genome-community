@@ -662,34 +662,10 @@ impl CanonicalTestHarness {
     // ========================================================================
     // CAT-3: REAL-WORLD DATASETS
     // ========================================================================
-    // DISABLED: L-011 - OOM on large datasets
-    // Will be re-enabled after GD-QMN + GDO Emulator implementation
-    // See: CHANGELOG.md, KNOWN-VIOLATIONS.md
+    // FIXED: L-011 - Now using streaming for large files
     // ========================================================================
 
     fn execute_dataset_tests(&mut self) {
-        self.print_category("CAT-3: REAL-WORLD DATASETS", "DISABLED");
-
-        println!("  ⏭️  SKIPPED: CAT-3 is disabled due to L-011 (OOM on large files)");
-        println!("  ℹ️  L-011 will be resolved after GD-QMN + GDO Emulator phase");
-        println!("  ℹ️  This is a known limitation, not a test failure");
-        println!();
-        
-        // Record as skipped, not failed
-        self.record("CAT-3", "Datasets",
-            "Real-world dataset processing",
-            TestStatus::Skip,
-            0,
-            "L-011 blocker",
-            "OOM on large files",
-            "Disabled until streaming/chunking implementation");
-        
-        println!();
-    }
-
-    #[allow(dead_code)]
-    fn execute_dataset_tests_disabled(&mut self) {
-        // Original implementation preserved for future use
         self.print_category("CAT-3: REAL-WORLD DATASETS", "CRITICAL");
 
         let datasets_path = self.datasets_dir.clone();
@@ -749,17 +725,35 @@ impl CanonicalTestHarness {
     }
 
     fn test_single_dataset(&mut self, path: &Path, _category: &str) {
+        use digital_genome_community::unl::GdoEmulator;
+        
         let start = Instant::now();
         let filename = path.file_name().unwrap().to_string_lossy().to_string();
         let short_name: String = filename.chars().take(12).collect();
         let test_id = format!("DS-{}", short_name.to_uppercase().replace(".", "_"));
 
-        // Read file
-        let mut file = match File::open(path) {
+        let metadata = match fs::metadata(path) {
+            Ok(m) => m,
+            Err(e) => {
+                self.record(&test_id, "Dataset",
+                    &format!("Stat {}", filename),
+                    TestStatus::Error,
+                    start.elapsed().as_nanos() as u64,
+                    &filename,
+                    &format!("Error: {}", e),
+                    "Metadata failed");
+                return;
+            }
+        };
+
+        let size = metadata.len() as usize;
+        const GDO_FRAME_SIZE: usize = 64 * 1024;
+
+        let file = match File::open(path) {
             Ok(f) => f,
             Err(e) => {
                 self.record(&test_id, "Dataset",
-                    &format!("Load {}", filename),
+                    &format!("Open {}", filename),
                     TestStatus::Error,
                     start.elapsed().as_nanos() as u64,
                     &filename,
@@ -769,40 +763,42 @@ impl CanonicalTestHarness {
             }
         };
 
-        let mut buffer = Vec::new();
-        if let Err(e) = file.read_to_end(&mut buffer) {
-            self.record(&test_id, "Dataset",
-                &format!("Read {}", filename),
-                TestStatus::Error,
-                start.elapsed().as_nanos() as u64,
-                &filename,
-                &format!("Error: {}", e),
-                "File read failed");
-            return;
-        }
-
-        let size = buffer.len();
-
-        // Process through cortex
-        let input = RawInput::from_bytes(buffer);
-        let output = self.cortex.perceive(&input);
+        let mut gdo = GdoEmulator::with_frame_size(GDO_FRAME_SIZE);
+        let result = match gdo.observe_stream(file) {
+            Ok(r) => r,
+            Err(e) => {
+                self.record(&test_id, "Dataset",
+                    &format!("Observe {}", filename),
+                    TestStatus::Error,
+                    start.elapsed().as_nanos() as u64,
+                    &filename,
+                    &format!("Error: {}", e),
+                    "GDO streaming failed");
+                return;
+            }
+        };
 
         // Verify determinism
-        let output2 = self.cortex.perceive(&input);
-        let deterministic = output.signals.entropy == output2.signals.entropy
-            && output.signals.mean == output2.signals.mean
-            && output.signals.std_dev == output2.signals.std_dev;
+        let file2 = File::open(path).unwrap();
+        let result2 = gdo.observe_stream(file2).unwrap();
+        
+        let deterministic = result.aggregated_signals.entropy == result2.aggregated_signals.entropy
+            && result.combined_dna == result2.combined_dna;
 
         let status = if deterministic { TestStatus::Pass } else { TestStatus::Fail };
 
+        // Show motors and DNA
+        let motors = &result.motor_scores;
+        let dna_hex: String = result.combined_dna.iter().take(8).map(|b| format!("{:02x}", b)).collect();
+
         self.record(&test_id, "Dataset",
-            &format!("{} ({} bytes)", filename, size),
+            &format!("{} ({} bytes, {} frames)", filename, size, result.frames_processed),
             status,
             start.elapsed().as_nanos() as u64,
-            &format!("size={}", size),
-            &format!("entropy={:.6}, mean={:.2}, std={:.2}", 
-                output.signals.entropy, output.signals.mean, output.signals.std_dev),
-            if deterministic { "Deterministic" } else { "NON-DETERMINISTIC!" });
+            &format!("P={:.2} N={:.2} C={:.2} M={:.2} CP={:.3}", 
+                motors.praxis, motors.nash, motors.chaos, motors.meristic, result.avg_craft_performance),
+            &format!("DNA={}... entropy={:.4}", dna_hex, result.aggregated_signals.entropy),
+            if deterministic { "GDO cycle complete" } else { "NON-DETERMINISTIC!" });
     }
 
     // ========================================================================

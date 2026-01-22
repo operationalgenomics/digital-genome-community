@@ -9,4 +9,4 @@ pub mod emulator;
 
 pub use spec::{UnlSpec, UnlRule, UnlInvariant};
 pub use gd_qmn::{GdQmn, Profile, Family};
-pub use emulator::{GdoEmulator, PerceptualFrame};
+pub use emulator::{GdoEmulator, PerceptualFrame, Observation, GdoResult, AggregatedMotorScores};

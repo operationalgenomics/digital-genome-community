@@ -5,6 +5,10 @@
 //! - L-004: ObservationReport (5 fields, implemented here)
 //! - L-008: GD-QMN Transport (BOF/EOF family)
 
+mod cycle;
+
+pub use cycle::{CognitiveCycle, CycleOutput, MotorScores, MotorContext};
+
 use serde::{Deserialize, Serialize};
 
 /// Technical certificate of cognitive cycle (L-004).

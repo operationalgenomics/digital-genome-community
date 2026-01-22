@@ -46,36 +46,23 @@ Este documento lista violações conhecidas do contrato canônico. A honestidade
 
 ## BLOQUEADORES PARA v1.0.0
 
-### L-011: OOM em Datasets Reais (CAT-3)
+### L-011: OOM em Datasets Reais (CAT-3) — ✅ RESOLVIDO
 
-**Status:** 🔴 CRÍTICO — BLOQUEADOR  
+**Status:** ✅ RESOLVIDO em v0.4.5  
 **Descoberto:** v0.1.1  
-**CAT-3:** DESABILITADO até resolução
+**Resolvido:** v0.4.5  
+**Solução:** GDO Emulator faz framing, não GDC
 
-**Sintoma:**
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│ CAT-3: REAL-WORLD DATASETS                              [CRITICAL]
-└─────────────────────────────────────────────────────────────────────┘
-Killed
-```
+**Correção Arquitetural:**
+- **ERRADO**: Streaming/chunking no GDC
+- **CERTO**: GDO decide frames (BOF/BOFR.../EOFR/EOF), GDC processa stateless
 
-**Causa:** Alocação de memória sem limite ao processar arquivos grandes.
-
-**Impacto:** Sistema mata o processo (OOM Killer) antes de completar validação.
-
-**Plano de Resolução:**
-1. Implementar streaming/chunking para arquivos grandes
-2. Adicionar limite de memória por operação
-3. Fragmentar processamento em janelas deslizantes
-4. Re-habilitar CAT-3 após implementação
-
-**Fase:** MVP-3.5 (após GD-QMN + GDO Emulator)
-
-**Roadmap:**
-```
-MVP-3 → MVP-3.5 (L-011) → MVP-4 → MVP-5 → v1.0.0
-```
+**Implementação:**
+- `GdoEmulator::observe_stream()` - lê arquivo em chunks
+- GDO fragmenta em frames com BOFR/EOFR
+- GDC processa cada frame individualmente
+- GDO agrega resultados (Welford's algorithm)
+- CAT-3 usa GDO Emulator para arquivos grandes
 
 ---
 

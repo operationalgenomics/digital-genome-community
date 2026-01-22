@@ -1,7 +1,7 @@
 DIGITAL GENOME COMMUNITY EDITION
 CANONICAL VALIDATION REPORT
 Document: DGC-CVP-2025-001
-Generated: SystemTime { tv_sec: 1769044223, tv_nsec: 840236936 }
+Generated: SystemTime { tv_sec: 1769049219, tv_nsec: 236553424 }
 
 ======================================================================
 
@@ -9,7 +9,7 @@ Test ID:     DET-001
 Category:    Determinism
 Description: 100 iterations produce identical output
 Status:      Pass
-Duration:    15905965 ns
+Duration:    14951545 ns
 Input:       1000 bytes sequential
 Output:      entropy=0.9994583731
 Details:     All 100 iterations matched (after warm-up)
@@ -18,7 +18,7 @@ Test ID:     DET-002
 Category:    Determinism
 Description: Replay context produces identical IDs
 Status:      Pass
-Duration:    24070 ns
+Duration:    338922 ns
 Input:       seed: canonical-validation-seed-001
 Output:      id1=ActionId(84baf26d-cf80-59ec-b13d-79b7815b93a2), id2=ActionId(84baf26d-cf80-59ec-b13d-79b7815b93a2)
 Details:     IDs matched
@@ -27,7 +27,7 @@ Test ID:     DET-003
 Category:    Determinism
 Description: Different cortex instances produce identical output
 Status:      Pass
-Duration:    139751 ns
+Duration:    116318 ns
 Input:       500 bytes constant (42)
 Output:      entropy=0.0000000000
 Details:     Cross-instance match
@@ -36,7 +36,7 @@ Test ID:     DET-004
 Category:    Determinism
 Description: Processing order does not affect results
 Status:      Pass
-Duration:    15312 ns
+Duration:    12824 ns
 Input:       Two different inputs, different order
 Output:      Order-independent results
 Details:     Order independence verified
@@ -45,7 +45,7 @@ Test ID:     DET-005
 Category:    Determinism
 Description: Maturation produces identical results
 Status:      Pass
-Duration:    525781 ns
+Duration:    521795 ns
 Input:       500 bytes with maturation
 Output:      iterations=2, converged=true
 Details:     Maturation deterministic
@@ -54,7 +54,7 @@ Test ID:     DET-006
 Category:    Determinism
 Description: Large input (100KB) produces identical results
 Status:      Pass
-Duration:    76369416 ns
+Duration:    79601423 ns
 Input:       100,000 bytes
 Output:      entropy=0.9999998615
 Details:     Large input deterministic (after warm-up)
@@ -63,7 +63,7 @@ Test ID:     DET-007
 Category:    Determinism
 Description: Edge values (0 and 255) produce identical results
 Status:      Pass
-Duration:    184292 ns
+Duration:    192735 ns
 Input:       All 0s and all 255s
 Output:      zero_entropy=0.0000000000, max_entropy=0.0000000000
 Details:     Edge values deterministic
@@ -72,7 +72,7 @@ Test ID:     DET-008
 Category:    Determinism
 Description: Empty input produces identical results
 Status:      Pass
-Duration:    1006 ns
+Duration:    966 ns
 Input:       0 bytes
 Output:      sample_count=0
 Details:     Empty input deterministic
@@ -81,7 +81,7 @@ Test ID:     DET-009
 Category:    Determinism
 Description: Single byte produces identical results
 Status:      Pass
-Duration:    1650 ns
+Duration:    1853 ns
 Input:       1 byte (127)
 Output:      mean=127
 Details:     Single byte deterministic
@@ -90,7 +90,7 @@ Test ID:     DET-010
 Category:    Determinism
 Description: Permutations are distinguished
 Status:      Pass
-Duration:    6544 ns
+Duration:    6763 ns
 Input:       [1,2,3,4,5] vs [5,4,3,2,1]
 Output:      mean1=3.000000000001, mean2=3.000000000005
 Details:     Permutations distinguished
@@ -99,7 +99,7 @@ Test ID:     DET-011
 Category:    Determinism
 Description: Floating point results are bit-exact
 Status:      Pass
-Duration:    4377 ns
+Duration:    3315 ns
 Input:       Edge value bytes
 Output:      entropy_bits=3fd4000000000000
 Details:     Bit-exact match
@@ -108,7 +108,7 @@ Test ID:     DET-012
 Category:    Determinism
 Description: ActionId hash is deterministic
 Status:      Pass
-Duration:    2381 ns
+Duration:    2373 ns
 Input:       seed: test-seed-canonical
 Output:      id1=ActionId(ed6367f3-a339-57ed-a564-90fdbec231ae)
 Details:     Hash deterministic
@@ -117,7 +117,7 @@ Test ID:     BND-001
 Category:    Boundary
 Description: Zero-length input handled correctly
 Status:      Pass
-Duration:    591 ns
+Duration:    2003 ns
 Input:       0 bytes
 Output:      sample_count=0, entropy=0
 Details:     Empty input test
@@ -126,7 +126,7 @@ Test ID:     BND-002
 Category:    Boundary
 Description: Single byte input handled correctly
 Status:      Pass
-Duration:    961 ns
+Duration:    15459 ns
 Input:       1 byte (42)
 Output:      sample_count=1
 Details:     Single byte test
@@ -135,7 +135,7 @@ Test ID:     BND-003
 Category:    Boundary
 Description: Two-byte input handled correctly
 Status:      Pass
-Duration:    826 ns
+Duration:    2153 ns
 Input:       2 bytes [0, 255]
 Output:      mean=127.5
 Details:     Two byte test
@@ -144,7 +144,7 @@ Test ID:     BND-004
 Category:    Boundary
 Description: All-same-value input has zero entropy
 Status:      Pass
-Duration:    48946 ns
+Duration:    60590 ns
 Input:       1000 bytes of 128
 Output:      entropy=0, std_dev=0
 Details:     Constant signal test
@@ -153,7 +153,7 @@ Test ID:     BND-005
 Category:    Boundary
 Description: All-different-values input detected
 Status:      Pass
-Duration:    665147 ns
+Duration:    50537 ns
 Input:       256 unique bytes
 Output:      unique_values=256
 Details:     All unique test
@@ -162,7 +162,7 @@ Test ID:     BND-006
 Category:    Boundary
 Description: Maximum entropy correctly calculated
 Status:      Pass
-Duration:    47098 ns
+Duration:    88948 ns
 Input:       256 unique values
 Output:      entropy=1.0000000000
 Details:     Max entropy test
@@ -171,7 +171,7 @@ Test ID:     BND-007
 Category:    Boundary
 Description: Minimum entropy (constant) correctly calculated
 Status:      Pass
-Duration:    47639 ns
+Duration:    56232 ns
 Input:       1000 zeros
 Output:      entropy=0
 Details:     Min entropy test
@@ -180,7 +180,7 @@ Test ID:     BND-008
 Category:    Boundary
 Description: Budget at exact limit succeeds
 Status:      Pass
-Duration:    40346 ns
+Duration:    46736 ns
 Input:       1000 bytes, 1000 byte limit
 Output:      result=true
 Details:     Exact budget test
@@ -189,7 +189,7 @@ Test ID:     BND-009
 Category:    Boundary
 Description: Budget exceeded returns error
 Status:      Pass
-Duration:    201 ns
+Duration:    302 ns
 Input:       1000 bytes, 100 byte limit
 Output:      error=true
 Details:     Budget exceeded test
@@ -198,25 +198,160 @@ Test ID:     BND-010
 Category:    Boundary
 Description: Recursion limit enforced correctly
 Status:      Pass
-Duration:    142 ns
+Duration:    220 ns
 Input:       limit=3, attempts=4
 Output:      depth=3, 4th_failed=true
 Details:     Recursion limit test
 ----------------------------------------------------------------------
-Test ID:     CAT-3
-Category:    Datasets
-Description: Real-world dataset processing
-Status:      Skip
-Duration:    0 ns
-Input:       L-011 blocker
-Output:      OOM on large files
-Details:     Disabled until streaming/chunking implementation
+Test ID:     DS-BPI CHALLENG
+Category:    Dataset
+Description: BPI Challenge 2017.xes (578941403 bytes, 8834 frames)
+Status:      Pass
+Duration:    171848324582 ns
+Input:       P=0.54 N=1.00 C=1.00 M=0.61 CP=0.325
+Output:      DNA=e9fa8322d1be2110... entropy=0.6183
+Details:     GDO cycle complete
+----------------------------------------------------------------------
+Test ID:     DS-RUL_FD001_TX
+Category:    Dataset
+Description: RUL_FD001.txt (529 bytes, 1 frames)
+Status:      Pass
+Duration:    2630668 ns
+Input:       P=0.54 N=1.00 C=1.00 M=0.61 CP=0.325
+Output:      DNA=1be4df7e0ec69458... entropy=0.4026
+Details:     GDO cycle complete
+----------------------------------------------------------------------
+Test ID:     DS-RUL_FD002_TX
+Category:    Dataset
+Description: RUL_FD002.txt (1369 bytes, 1 frames)
+Status:      Pass
+Duration:    4859569 ns
+Input:       P=0.54 N=1.00 C=1.00 M=0.61 CP=0.325
+Output:      DNA=7cccf2e8a4f2d69a... entropy=0.4034
+Details:     GDO cycle complete
+----------------------------------------------------------------------
+Test ID:     DS-RUL_FD003_TX
+Category:    Dataset
+Description: RUL_FD003.txt (528 bytes, 1 frames)
+Status:      Pass
+Duration:    7691167 ns
+Input:       P=0.54 N=1.00 C=1.00 M=0.61 CP=0.325
+Output:      DNA=790586278dd4523c... entropy=0.4025
+Details:     GDO cycle complete
+----------------------------------------------------------------------
+Test ID:     DS-RUL_FD004_TX
+Category:    Dataset
+Description: RUL_FD004.txt (1332 bytes, 1 frames)
+Status:      Pass
+Duration:    3984730 ns
+Input:       P=0.54 N=1.00 C=1.00 M=0.61 CP=0.325
+Output:      DNA=e00f4a330bf70d1c... entropy=0.4066
+Details:     GDO cycle complete
+----------------------------------------------------------------------
+Test ID:     DS-TEST_FD001_T
+Category:    Dataset
+Description: test_FD001.txt (2241951 bytes, 35 frames)
+Status:      Pass
+Duration:    649203422 ns
+Input:       P=0.54 N=1.00 C=1.00 M=0.61 CP=0.325
+Output:      DNA=d3035efb36b2a539... entropy=0.4397
+Details:     GDO cycle complete
+----------------------------------------------------------------------
+Test ID:     DS-TEST_FD002_T
+Category:    Dataset
+Description: test_FD002.txt (5768578 bytes, 89 frames)
+Status:      Pass
+Duration:    1819540767 ns
+Input:       P=0.54 N=1.00 C=1.00 M=0.61 CP=0.325
+Output:      DNA=f31e5b0dbbd92847... entropy=0.4381
+Details:     GDO cycle complete
+----------------------------------------------------------------------
+Test ID:     DS-TEST_FD003_T
+Category:    Dataset
+Description: test_FD003.txt (2843247 bytes, 44 frames)
+Status:      Pass
+Duration:    868409901 ns
+Input:       P=0.54 N=1.00 C=1.00 M=0.61 CP=0.325
+Output:      DNA=64a06a3c9bb85d84... entropy=0.4408
+Details:     GDO cycle complete
+----------------------------------------------------------------------
+Test ID:     DS-TEST_FD004_T
+Category:    Dataset
+Description: test_FD004.txt (6998973 bytes, 107 frames)
+Status:      Pass
+Duration:    2173140961 ns
+Input:       P=0.54 N=1.00 C=1.00 M=0.61 CP=0.325
+Output:      DNA=db26f118fd5e5810... entropy=0.4384
+Details:     GDO cycle complete
+----------------------------------------------------------------------
+Test ID:     DS-TRAIN_FD001_
+Category:    Dataset
+Description: train_FD001.txt (3535987 bytes, 54 frames)
+Status:      Pass
+Duration:    1093814943 ns
+Input:       P=0.54 N=1.00 C=1.00 M=0.61 CP=0.325
+Output:      DNA=406122ade39812dd... entropy=0.4400
+Details:     GDO cycle complete
+----------------------------------------------------------------------
+Test ID:     DS-TRAIN_FD002_
+Category:    Dataset
+Description: train_FD002.txt (9136239 bytes, 140 frames)
+Status:      Pass
+Duration:    2785768944 ns
+Input:       P=0.54 N=1.00 C=1.00 M=0.61 CP=0.325
+Output:      DNA=75e854b4b3053db4... entropy=0.4381
+Details:     GDO cycle complete
+----------------------------------------------------------------------
+Test ID:     DS-TRAIN_FD003_
+Category:    Dataset
+Description: train_FD003.txt (4238582 bytes, 65 frames)
+Status:      Pass
+Duration:    1280572854 ns
+Input:       P=0.54 N=1.00 C=1.00 M=0.61 CP=0.325
+Output:      DNA=ceaecfb4e1d6011c... entropy=0.4410
+Details:     GDO cycle complete
+----------------------------------------------------------------------
+Test ID:     DS-TRAIN_FD004_
+Category:    Dataset
+Description: train_FD004.txt (10411954 bytes, 159 frames)
+Status:      Pass
+Duration:    3201788202 ns
+Input:       P=0.54 N=1.00 C=1.00 M=0.61 CP=0.325
+Output:      DNA=df247a703615eb47... entropy=0.4384
+Details:     GDO cycle complete
+----------------------------------------------------------------------
+Test ID:     DS-YOLO11N_PT
+Category:    Dataset
+Description: yolo11n.pt (5613764 bytes, 86 frames)
+Status:      Pass
+Duration:    2161578497 ns
+Input:       P=0.54 N=1.00 C=1.00 M=0.61 CP=0.325
+Output:      DNA=712b964743bd678a... entropy=0.9159
+Details:     GDO cycle complete
+----------------------------------------------------------------------
+Test ID:     DS-YOLOV8N_PT
+Category:    Dataset
+Description: yolov8n.pt (6549796 bytes, 100 frames)
+Status:      Pass
+Duration:    2583772274 ns
+Input:       P=0.54 N=1.00 C=1.00 M=0.61 CP=0.325
+Output:      DNA=613835f246e69075... entropy=0.9200
+Details:     GDO cycle complete
+----------------------------------------------------------------------
+Test ID:     DS-ANIMATION VS
+Category:    Dataset
+Description: Animation vs. Math [1].MP4 (52573485 bytes, 803 frames)
+Status:      Pass
+Duration:    21229153417 ns
+Input:       P=0.54 N=1.00 C=1.00 M=0.61 CP=0.325
+Output:      DNA=06d46c28d09a8fc3... entropy=0.9915
+Details:     GDO cycle complete
 ----------------------------------------------------------------------
 Test ID:     STR-001
 Category:    Stress
 Description: 10,000 rapid sequential calls
 Status:      Pass
-Duration:    7228272 ns
+Duration:    7653513 ns
 Input:       10,000 calls
 Output:      completed in 7ms
 Details:     Rapid calls test
@@ -225,16 +360,16 @@ Test ID:     STR-002
 Category:    Stress
 Description: 1 MB input processing
 Status:      Pass
-Duration:    287693735 ns
+Duration:    278312589 ns
 Input:       1,000,000 bytes
-Output:      entropy=1.000000, time=287ms
+Output:      entropy=1.000000, time=278ms
 Details:     Large input test
 ----------------------------------------------------------------------
 Test ID:     STR-003
 Category:    Stress
 Description: 1,000 different small inputs
 Status:      Pass
-Duration:    4082606 ns
+Duration:    4546331 ns
 Input:       1,000 x 100 bytes
 Output:      completed in 4ms
 Details:     Many small inputs test
@@ -243,16 +378,16 @@ Test ID:     STR-004
 Category:    Stress
 Description: Memory pressure (100 x 10KB)
 Status:      Pass
-Duration:    146177761 ns
+Duration:    140487414 ns
 Input:       100 x 10,000 bytes
-Output:      completed in 146ms
+Output:      completed in 140ms
 Details:     Memory pressure test
 ----------------------------------------------------------------------
 Test ID:     PROT-001
 Category:    Protocol
 Description: Basic GDE->GDC request/response
 Status:      Pass
-Duration:    14026 ns
+Duration:    12224 ns
 Input:       10 bytes
 Output:      complete_response=true
 Details:     Basic protocol test
@@ -261,7 +396,7 @@ Test ID:     PROT-002
 Category:    Protocol
 Description: Replay produces identical response
 Status:      Pass
-Duration:    4408 ns
+Duration:    4249 ns
 Input:       Same request twice
 Output:      identical=true
 Details:     Replay protocol test
@@ -270,7 +405,7 @@ Test ID:     PROT-003
 Category:    Protocol
 Description: Budget exceeded returns proper error
 Status:      Pass
-Duration:    467 ns
+Duration:    701 ns
 Input:       1000 bytes, 10 byte limit
 Output:      error_returned=true
 Details:     Budget error protocol test
@@ -279,7 +414,7 @@ Test ID:     PROT-004
 Category:    Protocol
 Description: Empty request handled gracefully
 Status:      Pass
-Duration:    574 ns
+Duration:    570 ns
 Input:       0 bytes
 Output:      sample_count=0
 Details:     Empty request protocol test
@@ -288,7 +423,7 @@ Test ID:     PROT-005
 Category:    Protocol
 Description: Maturation request returns state
 Status:      Pass
-Duration:    16012 ns
+Duration:    4955 ns
 Input:       10 bytes + maturation config
 Output:      iterations=2
 Details:     Maturation protocol test
@@ -297,7 +432,7 @@ Test ID:     PROT-006
 Category:    Protocol
 Description: State isolation between requests
 Status:      Pass
-Duration:    5017 ns
+Duration:    3215 ns
 Input:       Interleaved requests
 Output:      isolated=true
 Details:     State isolation test
@@ -306,7 +441,7 @@ Test ID:     ADV-001
 Category:    Adversarial
 Description: All zeros (10KB)
 Status:      Pass
-Duration:    713016 ns
+Duration:    606829 ns
 Input:       10,000 x 0x00
 Output:      entropy=0, mean=0
 Details:     All zeros adversarial test
@@ -315,7 +450,7 @@ Test ID:     ADV-002
 Category:    Adversarial
 Description: All 0xFF (10KB)
 Status:      Pass
-Duration:    849466 ns
+Duration:    667495 ns
 Input:       10,000 x 0xFF
 Output:      entropy=0, mean=255
 Details:     All ones adversarial test
@@ -324,7 +459,7 @@ Test ID:     ADV-003
 Category:    Adversarial
 Description: Alternating 0/255 pattern
 Status:      Pass
-Duration:    909211 ns
+Duration:    737131 ns
 Input:       0,255,0,255... (10KB)
 Output:      periodicity=true
 Details:     Alternating adversarial test
@@ -333,7 +468,7 @@ Test ID:     ADV-004
 Category:    Adversarial
 Description: Pseudo-random data (10KB)
 Status:      Pass
-Duration:    1939548 ns
+Duration:    1761502 ns
 Input:       LCG random
 Output:      entropy=0.997337
 Details:     Near random adversarial test
@@ -342,7 +477,7 @@ Test ID:     ADV-005
 Category:    Adversarial
 Description: Long runs of repeated values
 Status:      Pass
-Duration:    942025 ns
+Duration:    881769 ns
 Input:       100 runs x 100 bytes each
 Output:      entropy=0.830482
 Details:     Long runs adversarial test
@@ -351,7 +486,7 @@ Test ID:     ADV-006
 Category:    Adversarial
 Description: Sinusoidal pattern
 Status:      Pass
-Duration:    1603659 ns
+Duration:    1837144 ns
 Input:       sin(i) * 127 + 128
 Output:      entropy=0.956662, periodicity=true
 Details:     Pathological adversarial test
@@ -360,7 +495,7 @@ Test ID:     CON-001
 Category:    Concurrency
 Description: 10 parallel cortex instances
 Status:      Pass
-Duration:    737986 ns
+Duration:    2053501 ns
 Input:       10 threads
 Output:      completed=10
 Details:     Parallel instances test
@@ -369,7 +504,7 @@ Test ID:     CON-002
 Category:    Concurrency
 Description: Shared cortex across 10 threads
 Status:      Pass
-Duration:    385628 ns
+Duration:    959814 ns
 Input:       Arc<SensoryCortex>
 Output:      completed=10
 Details:     Shared cortex test
@@ -378,7 +513,7 @@ Test ID:     NUM-001
 Category:    Numerical
 Description: No NaN values in outputs
 Status:      Pass
-Duration:    140155 ns
+Duration:    149379 ns
 Input:       7 edge case inputs
 Output:      nan_found=false
 Details:     NaN test
@@ -387,7 +522,7 @@ Test ID:     NUM-002
 Category:    Numerical
 Description: No Infinity values in outputs
 Status:      Pass
-Duration:    34210255 ns
+Duration:    30583174 ns
 Input:       4 large inputs
 Output:      inf_found=false
 Details:     Infinity test
@@ -396,7 +531,7 @@ Test ID:     NUM-003
 Category:    Numerical
 Description: All values within valid bounds
 Status:      Pass
-Duration:    184195 ns
+Duration:    158181 ns
 Input:       1000 bytes
 Output:      entropy=0.999458, mean=124.72, std=72.53
 Details:     Bounds test
@@ -405,7 +540,7 @@ Test ID:     NUM-004
 Category:    Numerical
 Description: Different distributions produce different stats
 Status:      Pass
-Duration:    189039 ns
+Duration:    131613 ns
 Input:       1000 bytes: uniform vs bimodal
 Output:      mean1=128.00, mean2=127.50, std1=0.82, std2=107.50
 Details:     Distributions distinguished
