@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [0.5.1] - 2025-01-26 - Canonical Compliance (M4.6 + M4.7)
+## [0.5.1] - 2025-01-26 - Canonical Compliance (M4.6 + M4.7 + M5.6)
 
 ### Added
 
@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `ORIGIN_EXTERNAL` (0x0020): State from perception
   - `ORIGIN_INTERNAL` (0x0021): State from MCI/Meristic
   - `ORIGIN_RECOMBINED` (0x0022): State from cognitive recombination
+- **PRINCIPLES.md**: Canonical principles document with pipeline reconciliation
+- **GATES_QUANTUM_READY.md**: Quantum-ready conformance gates
 
 ### Changed
 
@@ -27,8 +29,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Documentation
 
+- **M5.6 Complete**: Pipeline reconciliation (E1-E6 ≡ POCIRE)
+  - E1:Percepção ≡ P:Perception
+  - E2:Codificação ≡ O:Observation
+  - E3:Avaliação ≡ C:Comprehension
+  - E4:Integração ≡ I:Interiorization
+  - E5:Deliberação ≡ R:Rationalization
+  - E6:Emissão ≡ E:Emission
 - Canon compliance notes added to `cognitive::cycle` module
-- Pipeline stages annotated: E1 (Perceive), E3 (Quadrimotor), E4 (Integration), E6 (Emission)
 
 ### Tests
 
