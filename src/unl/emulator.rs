@@ -11,7 +11,7 @@
 
 use crate::cognitive::{
     TransportCode, ObservationReport, MotorSignatures,
-    CognitiveCycle, CycleOutput, MotorContext,
+    CognitiveCycle, MotorContext,
 };
 use crate::sensory::SensorySignals;
 use sha2::{Sha256, Digest};

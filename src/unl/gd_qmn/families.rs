@@ -45,6 +45,7 @@ pub mod f5 {
 
 /// F6: Operational - Transport/control codes
 pub mod f6 {
+    // Transport
     pub const BOF: u16 = 0x0001;
     pub const EOF: u16 = 0x0002;
     pub const BOFR: u16 = 0x0003;
@@ -52,6 +53,12 @@ pub mod f6 {
     pub const VERSION: u16 = 0x0010;
     pub const CHECKSUM: u16 = 0x0011;
     pub const NOP: u16 = 0x0000;
+    
+    // Origin markers (AO-18: Autorreferência Cognitiva)
+    // Used to mark cognitive state provenance
+    pub const ORIGIN_EXTERNAL: u16 = 0x0020;   // State from perception
+    pub const ORIGIN_INTERNAL: u16 = 0x0021;   // State from MCI/Meristic
+    pub const ORIGIN_RECOMBINED: u16 = 0x0022; // State from cognitive recombination
 }
 
 #[cfg(test)]
@@ -62,6 +69,14 @@ mod tests {
     fn test_f6_transport_codes() {
         assert_eq!(f6::BOF, 0x0001);
         assert_eq!(f6::EOF, 0x0002);
+    }
+
+    #[test]
+    fn test_f6_origin_codes() {
+        // AO-18: Autorreferência Cognitiva
+        assert_eq!(f6::ORIGIN_EXTERNAL, 0x0020);
+        assert_eq!(f6::ORIGIN_INTERNAL, 0x0021);
+        assert_eq!(f6::ORIGIN_RECOMBINED, 0x0022);
     }
 
     #[test]

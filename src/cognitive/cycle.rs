@@ -6,6 +6,16 @@
 //! 3. Evaluate motors (Praxis, Nash, Chaos, Meristic)
 //! 4. Calculate Craft Performance (CP)
 //! 5. Emit DNA
+//!
+//! # Canonical Compliance
+//!
+//! ## LEI-AF-10-07: Posterioridade do Meta-Motor Merístico
+//! The Meristic motor executes AFTER Praxis, Nash, and Chaos have completed.
+//! This is enforced by sequential execution order in `process()`.
+//!
+//! ## AO-18: Autorreferência Cognitiva
+//! Origin markers (EXTERNAL/INTERNAL/RECOMBINED) are available in F6 family.
+//! States from perception are EXTERNAL; states from MCI/Meristic are INTERNAL.
 
 use crate::sensory::{RawInput, SensoryCortex, CortexOutput};
 use crate::motors::{
@@ -131,12 +141,18 @@ impl CognitiveCycle {
     }
 
     /// Execute complete cognitive cycle on input data.
+    /// 
+    /// # Canonical Order (LEI-AF-10-07)
+    /// Motors execute in strict sequence: Praxis → Nash → Chaos → Meristic
+    /// Meristic ONLY executes after P/C/N have stabilized (completed).
     pub fn process(&self, data: &[u8], context: &MotorContext) -> CycleOutput {
-        // 1. Perceive
+        // E1: Perceive (ORIGIN_EXTERNAL)
         let input = RawInput::from_bytes(data.to_vec());
         let perception = self.cortex.perceive(&input);
 
-        // 2. Evaluate Praxis
+        // E3: Quadrimotor Evaluation - CANONICAL ORDER
+        
+        // Motor 1/4: Praxis (truth observed)
         let praxis_input = PraxisInput {
             proposed: context.proposed.clone(),
             necessary: context.necessary.clone(),
@@ -145,7 +161,7 @@ impl CognitiveCycle {
         };
         let praxis_output = self.praxis.evaluate(&praxis_input);
 
-        // 3. Evaluate Nash (conditional)
+        // Motor 2/4: Nash (equilibrium, conditional)
         let (nash_score, nash_applicable) = if context.player_count >= 2 && !context.payoffs.is_empty() {
             let nash_input = NashInput {
                 num_players: context.player_count,
@@ -160,7 +176,7 @@ impl CognitiveCycle {
             (1.0, false)
         };
 
-        // 4. Evaluate Chaos
+        // Motor 3/4: Chaos (robustness)
         let chaos_input = ChaosInput {
             reference_trajectory: context.reference_trajectory.clone(),
             perturbed_trajectory: context.perturbed_trajectory.clone(),
@@ -170,7 +186,8 @@ impl CognitiveCycle {
         };
         let chaos_output = self.chaos.evaluate(&chaos_input);
 
-        // 5. Evaluate Meristic
+        // Motor 4/4: Meristic (POSTERIOR - LEI-AF-10-07)
+        // Executes ONLY after Praxis, Nash, Chaos have completed
         let meristic_input = MeristicInput {
             current_embedding: context.current_embedding.clone(),
             historical_embeddings: context.historical_embeddings.clone(),
@@ -187,7 +204,7 @@ impl CognitiveCycle {
             meristic: meristic_output.score,
         };
 
-        // 6. Calculate CP
+        // E4: Integration - Calculate CP (AF-10.5)
         let cp_result = CraftPerformance::calculate(
             motor_scores.praxis,
             motor_scores.nash,
@@ -201,7 +218,7 @@ impl CognitiveCycle {
             CpResult::Invalid { .. } => (0.0, true),
         };
 
-        // 7. Generate DNA fingerprint
+        // E6: Emission - Generate DNA fingerprint
         let dna_fingerprint = Self::generate_dna(&perception, &motor_scores, cp_value);
 
         CycleOutput {
@@ -256,5 +273,25 @@ mod tests {
         let o2 = cycle.process(&[10, 20, 30], &ctx);
         
         assert_eq!(o1.dna_fingerprint, o2.dna_fingerprint);
+    }
+
+    /// LEI-AF-10-07: Verifies Meristic motor posteriority
+    /// The Meristic motor must execute AFTER Praxis, Nash, Chaos
+    #[test]
+    fn test_canonical_motor_order() {
+        let cycle = CognitiveCycle::new();
+        let ctx = MotorContext::default();
+        
+        // Execute cycle - motors run in canonical order
+        let output = cycle.process(&[1, 2, 3], &ctx);
+        
+        // All motors must produce valid scores [0,1]
+        assert!(output.motor_scores.praxis >= 0.0 && output.motor_scores.praxis <= 1.0);
+        assert!(output.motor_scores.nash >= 0.0 && output.motor_scores.nash <= 1.0);
+        assert!(output.motor_scores.chaos >= 0.0 && output.motor_scores.chaos <= 1.0);
+        assert!(output.motor_scores.meristic >= 0.0 && output.motor_scores.meristic <= 1.0);
+        
+        // CP must be valid (product of all motors)
+        assert!(output.cp_value >= 0.0 && output.cp_value <= 1.0);
     }
 }

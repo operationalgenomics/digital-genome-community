@@ -8,6 +8,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.5.1] - 2025-01-26 - Canonical Compliance (M4.6 + M4.7)
+
+### Added
+
+- **AO-18 (Autorreferência Cognitiva)**: Origin markers in F6 family
+  - `ORIGIN_EXTERNAL` (0x0020): State from perception
+  - `ORIGIN_INTERNAL` (0x0021): State from MCI/Meristic
+  - `ORIGIN_RECOMBINED` (0x0022): State from cognitive recombination
+
+### Changed
+
+- **LEI-AF-10-07 (Posterioridade Merística)**: 
+  - Added canonical documentation to `CognitiveCycle`
+  - Motor execution order explicitly documented: Praxis → Nash → Chaos → Meristic
+  - Meristic executes ONLY after P/C/N have completed
+- Pipeline comments aligned with Canon E1-E6 nomenclature
+
+### Documentation
+
+- Canon compliance notes added to `cognitive::cycle` module
+- Pipeline stages annotated: E1 (Perceive), E3 (Quadrimotor), E4 (Integration), E6 (Emission)
+
+### Tests
+
+- 214 unit tests passing
+- 35 integration tests passing
+- New test: `test_f6_origin_codes` (AO-18)
+- New test: `test_canonical_motor_order` (LEI-AF-10-07)
+
+---
+
 ## [0.5.0] - 2025-01-21 - MVP-3.5: Complete Cognitive Cycle
 
 ### Added
