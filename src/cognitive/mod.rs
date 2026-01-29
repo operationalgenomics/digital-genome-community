@@ -4,10 +4,17 @@
 //! - L-003: PerceptualFrame (GDO responsibility, documented here)
 //! - L-004: ObservationReport (5 fields, implemented here)
 //! - L-008: GD-QMN Transport (BOF/EOF family)
+//! - LEI-AF-10-08: Structured DNA (actions, CP vector, uncertainties)
+//! - AO-18: Origin marker (EXTERNAL/INTERNAL/RECOMBINED)
 
 mod cycle;
+mod dna;
 
 pub use cycle::{CognitiveCycle, CycleOutput, MotorScores, MotorContext};
+pub use dna::{
+    StructuredDNA, DnaBuilder, AtomicAction,
+    Uncertainty, MeristicSuggestion,
+};
 
 use serde::{Deserialize, Serialize};
 

@@ -8,6 +8,122 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.6.0] - 2026-01-28 - MVP-6: Cognição Completa (AF-11, AF-12, AO-18)
+
+### 🧠 Major: First Synthetic Brain with Learning and Memory
+
+This release implements the three fundamental capabilities that transform GDC from
+a cognitive processor into a true synthetic brain:
+
+| Capability | Canon | Status |
+|------------|-------|--------|
+| **Aprender** | AF-11 | ✅ Implemented |
+| **Lembrar** | AF-12 | ✅ Implemented |
+| **Reconhecer-se** | AO-18 | ✅ Implemented |
+
+### Added
+
+#### Memory Module (`src/memory/`)
+
+- **CanonicalContext** (LEI-AF-12-02)
+  - Problem class identifier (SHA-256 hash)
+  - Serialized initial conditions
+  - Supports dominance comparison between Codons
+  
+- **CanonicalCodon** (LEI-AF-12-01)
+  - 4 mandatory fields: forma, evidência, assinatura_avaliativa, condição_uso
+  - Atomic knowledge unit in MCI
+  - Fingerprint generation for deterministic identification
+  
+- **Origin Marker** (AO-18)
+  - `Origin::External`: State from perception
+  - `Origin::Internal`: State from MCI/Meristic
+  - `Origin::Recombined`: State from cognitive recombination
+  - Deterministically assigned, consistent under replay
+  
+- **EvaluativeSignature**
+  - 4 motor scores (M_P, M_N, M_C, M_M)
+  - Craft Performance (CP = M_P × M_N × M_C × M_M)
+  - Nash applicability flag
+  
+- **MCI** (AF-12: Memória Cognitiva Interna)
+  - BTreeMap storage indexed by CanonicalContext
+  - Non-dominance policy (LEI-AF-12-02)
+  - Query by context with similarity matching
+  - Baseline CP calculation for learning
+  - State fingerprint for replay verification
+  - Optional capacity limit with LRU eviction
+  
+- **LearningEngine** (AF-11)
+  - Stagnation detection (LEI-AF-11-01)
+  - Strict improvement criterion (LEI-AF-11-02)
+  - Vetoed Codon rejection (LEI-AF-11-04)
+  - Epistemic triggers: Stagnation, MeristicProposal, ExplicitRequest, NoveltyDetected
+
+#### Structured DNA (`src/cognitive/dna.rs`)
+
+- **StructuredDNA** (LEI-AF-10-08)
+  - 6 components: actions, cp_vector, cp_task, weak_actions, uncertainties, suggestions
+  - Multiplicative CP aggregation (∏ cpᵢ)
+  - Weak action identification (below 0.7 threshold)
+  - Fingerprint generation
+  
+- **AtomicAction** (LEI-AF-2-10)
+  - Minimal operational unit
+  - Origin marker per action
+  - State before/after fingerprints
+  - Individual evaluative signature
+  
+- **DnaBuilder**
+  - Fluent API for incremental DNA construction
+
+### Changed
+
+- **lib.rs**: Updated version header to 0.6.0
+- **lib.rs**: Added memory module with full exports
+- **lib.rs**: Added thread-safety tests for new types
+- **cognitive/mod.rs**: Added DNA exports
+
+### Tests
+
+- **305 total tests passing** (252 unit + 17 canonical + 35 integration + 1 doc)
+- **28 new memory module tests**:
+  - Context creation, determinism, ordering
+  - Codon creation, dominance, fingerprinting
+  - MCI incorporation, dominance policy, capacity limits
+  - Learning engine triggers, success/rejection paths
+  - Complete learning cycle integration
+  - Origin marker consistency
+  - Thread-safety verification
+- **8 new DNA tests**:
+  - Structured DNA creation
+  - CP vector calculation
+  - Weak actions identification
+  - Vetoed DNA detection
+  - DnaBuilder fluent API
+
+### Canonical Compliance
+
+| Law/Gate | Description | Status |
+|----------|-------------|--------|
+| AF-11 | Autonomous cognitive learning | ✅ |
+| AF-12 | Internal cognitive memory (MCI) | ✅ |
+| AO-18 | Self-reference via Origin | ✅ |
+| LEI-AF-11-01 | Epistemic trigger by stagnation | ✅ |
+| LEI-AF-11-02 | Strict CP improvement | ✅ |
+| LEI-AF-11-04 | Vetoed cannot incorporate | ✅ |
+| LEI-AF-12-01 | Canonical Codon structure | ✅ |
+| LEI-AF-12-02 | Non-dominance policy | ✅ |
+| LEI-AF-12-04 | MCI in pipeline | ✅ |
+| LEI-AF-12-05 | Serializable for replay | ✅ |
+| LEI-AF-10-08 | Structured DNA | ✅ |
+| LEI-AF-2-10 | Atomic actions | ✅ |
+| GATE-UNL-01 | Semantic singularity | ✅ |
+| GATE-DNA-01 | Reproducibility | ✅ |
+| GATE-CP-01 | CP vector | ✅ |
+
+---
+
 ## [0.5.1] - 2025-01-26 - Canonical Compliance (M4.6 + M4.7 + M5.6)
 
 ### Added
@@ -18,6 +134,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `ORIGIN_RECOMBINED` (0x0022): State from cognitive recombination
 - **PRINCIPLES.md**: Canonical principles document with pipeline reconciliation
 - **GATES_QUANTUM_READY.md**: Quantum-ready conformance gates
+- **LAWS_UNL_UNIVERSALITY.md**: Semantic universality laws (LEI-AF-2-10 to LEI-AF-2-14)
+  - LEI-AF-2-10: Abertura Representacional (Merismo-Ready)
+  - LEI-AF-2-11: Unicidade Intrínseca
+  - LEI-AF-2-12: Delegação Observacional
+  - LEI-AF-2-13: Evolução Contributiva
+  - LEI-AF-2-14: Projeção em Camadas
+- **Canonical Validation Tests**: 17 new tests including 1000-replay determinism
 
 ### Changed
 

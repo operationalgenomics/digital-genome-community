@@ -4,16 +4,21 @@
 //! Title: Digital Genome Community Edition - Core Library
 //! Author: Carlos Eduardo Favini
 //! Date: 2025-01-02
-//! Version: 0.1.0-rc1 (Adão Sintético)
+//! Version: 0.6.0 (MVP-6: Cognição Completa)
 //! Description: Root module for the Digital Genome Community Edition.
 //! This is a synthetic cognitive core that perceives, observes,
-//! comprehends, and emits DNA with Score. It does not act.
+//! comprehends, learns, remembers, and emits DNA with Score. It does not act.
 //! Thread-safe: All public types are Send + Sync.
 //! Epistemologically neutral: No domain knowledge, no ontologies.
 //!
 //! Foundational Axiom B.1: "The Core has basal operational existence
 //! that is semantically null, and its cognition is event-driven
 //! (activated by input, ended by output)."
+//!
+//! # MVP-6 Capabilities (AF-11, AF-12, AO-18)
+//! - **Aprender**: Incorporates Codons by strict CP improvement
+//! - **Lembrar**: MCI stores Codons indexed by context
+//! - **Reconhecer-se**: Origin marker distinguishes EXTERNAL/INTERNAL
 //!
 //! Layer: Community
 //! Dependencies: All internal modules
@@ -29,6 +34,8 @@
 //! 2025-01-02 - Carlos Eduardo Favini - Threading & Epistemological Neutrality (v1.3.0)
 //! 2025-01-02 - Carlos Eduardo Favini - Computational Self-Preservation (v1.4.0)
 //! 2025-01-02 - Carlos Eduardo Favini - Perceptual Maturation (v1.5.0)
+//! 2026-01-28 - Carlos Eduardo Favini - MVP-6: Cognição Completa (v0.6.0)
+//!              AF-11 (Aprendizado), AF-12 (MCI), AO-18 (Autorreferência)
 //! --------------------------
 
 // =============================================================================
@@ -117,11 +124,28 @@ pub mod cognitive;
 pub mod unl;
 
 // =============================================================================
+// MVP-6: COGNITIVE MEMORY SYSTEM - v0.6.0
+// =============================================================================
+
+/// Memory system (AF-11, AF-12, AO-18)
+///
+/// Implements cognitive memory for learning and recall:
+/// - AF-11: Autonomous cognitive learning by replayable incorporation
+/// - AF-12: Internal cognitive memory (MCI) - non-observation
+/// - AO-18: Self-reference via Origin marker
+///
+/// CRITICAL DISTINCTION:
+/// - MCI is NOT observation (does not store raw inputs)
+/// - MCI IS internal (stores evaluated Codons)
+/// - Origin IS deterministic (consistent under replay)
+pub mod memory;
+
+// =============================================================================
 // RE-EXPORTS
 // =============================================================================
 
 pub use core_types::*;
-pub use math::craft::CraftPerformance;
+pub use math::craft::{CraftPerformance, CpResult};
 pub use replay::{ReplayContext, ReplaySession, ReplayEvent, ReplayVerifier};
 pub use sensory::{
     CommunityOutput, CortexOutput, MatureOutput, 
@@ -135,6 +159,14 @@ pub use competition::{MotorCompetition, MotorCooperation, MotorDynamics, MotorTy
 pub use observability::{CognitiveObservability, HealthIndicators, ProgressTracker};
 pub use completeness::{CognitiveCompleteness, AbstractionLevel, ConflictType, MissingSignal};
 
+// v0.5.0 exports (cognitive cycle)
+pub use cognitive::{
+    CognitiveCycle, CycleOutput, MotorContext, MotorScores,
+    TransportCode, ObservationReport, MotorSignatures,
+    // v0.6.0: Structured DNA
+    StructuredDNA, DnaBuilder, AtomicAction, Uncertainty, MeristicSuggestion,
+};
+
 // v1.4.0 exports
 pub use budget::{
     ComputationalBudget, IntegrityCheck, NumericalIssue,
@@ -146,6 +178,18 @@ pub use budget::{
 pub use maturation::{
     MaturationConfig, MaturationState, StopReason,
     RefinementStep, RefinementMetrics,
+};
+
+// v0.6.0 exports (MVP-6: Cognitive Memory)
+pub use memory::{
+    // Context (LEI-AF-12-02)
+    CanonicalContext,
+    // Codon (LEI-AF-12-01)
+    CanonicalCodon, Origin, EvaluativeSignature, ActivationCondition, ReplayableProvenance,
+    // MCI (AF-12)
+    MCI, MciQueryResult, MciStats, MciError,
+    // Learning (AF-11)
+    LearningEngine, LearningResult, EpistemicTrigger, RejectionReason, StagnationDetector,
 };
 
 // =============================================================================
@@ -226,5 +270,21 @@ mod thread_safety_tests {
         assert_send_sync::<StopReason>();
         assert_send_sync::<RefinementStep>();
         assert_send_sync::<RefinementMetrics>();
+    }
+
+    #[test]
+    fn test_memory_types_are_send_sync() {
+        assert_send_sync::<CanonicalContext>();
+        assert_send_sync::<CanonicalCodon>();
+        assert_send_sync::<Origin>();
+        assert_send_sync::<EvaluativeSignature>();
+        assert_send_sync::<MCI>();
+        assert_send_sync::<MciQueryResult>();
+    }
+
+    #[test]
+    fn test_dna_types_are_send_sync() {
+        assert_send_sync::<StructuredDNA>();
+        assert_send_sync::<AtomicAction>();
     }
 }
