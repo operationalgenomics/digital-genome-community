@@ -8,6 +8,84 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.7.0] - 2026-01-29 - MVP-7: Validação Final — Integração MCI
+
+### 🧠 Major: First Synthetic Brain Complete
+
+This release completes the integration of MCI into the cognitive cycle,
+making the GDC a fully autonomous learning system.
+
+### Added
+
+#### CognitiveCycle Integration
+
+- **MCI in Pipeline** (LEI-AF-12-04)
+  - MCI consulted during E3 (evaluation stage)
+  - Baseline CP calculated from existing knowledge
+  - Similar Codons retrieved for context enrichment
+  
+- **Learning in Cycle** (AF-11)
+  - Automatic learning attempt when CP > baseline
+  - Epistemic triggers integrated (stagnation detection)
+  - Learning result included in CycleOutput
+  
+- **Origin Tracking** (AO-18)
+  - `Origin::External` → fresh perception
+  - `Origin::Internal` → after successful learning
+  - `Origin::Recombined` → MCI contributed to evaluation
+
+- **CycleOutput Extended**
+  - `structured_dna`: Full StructuredDNA (LEI-AF-10-08)
+  - `origin`: Knowledge source marker
+  - `learning_result`: Optional learning outcome
+  - `baseline_cp`: MCI baseline before cycle
+  - `mci_consulted`: Whether MCI contributed
+
+- **Readonly Processing**
+  - `process_readonly()`: Evaluate without learning
+  - For replay verification and testing
+
+### Changed
+
+- **CognitiveCycle::process()** now requires `&mut self`
+  - Enables MCI updates during processing
+  - Cycle counter incremented per call
+  
+- **CycleOutput** expanded with MVP-7 fields
+  - Backward compatible (legacy `dna_fingerprint` retained)
+
+### Tests
+
+- **312 total tests passing** (259 unit + 17 canonical + 35 integration + 1 doc)
+- **11 new cycle integration tests**:
+  - `test_learning_integration`: First cycle learns
+  - `test_mci_consultation`: MCI queried after first cycle
+  - `test_origin_markers`: EXTERNAL/INTERNAL/RECOMBINED
+  - `test_structured_dna_emission`: DNA structure verification
+  - `test_cycle_counter`: Counter increment
+  - `test_readonly_processing`: No learning in readonly
+  - `test_complete_learning_cycle_integration`: End-to-end
+
+### Canonical Compliance
+
+| Capability | Canon | Status |
+|------------|-------|--------|
+| Perceber | AF-3, AF-5 | ✅ |
+| Avaliar | AF-10 | ✅ |
+| Integrar | AF-10.5 | ✅ |
+| Emitir | AF-3 | ✅ |
+| **Aprender** | **AF-11** | ✅ **INTEGRATED** |
+| **Lembrar** | **AF-12** | ✅ **INTEGRATED** |
+| **Reconhecer-se** | **AO-18** | ✅ **INTEGRATED** |
+
+### 🎯 Status: READY FOR v1.0.0
+
+All 7 cognitive capabilities are now implemented and integrated:
+- Perceive, Evaluate, Integrate, Emit (v0.5.x)
+- Learn, Remember, Self-Reference (v0.6.0 + v0.7.0)
+
+---
+
 ## [0.6.0] - 2026-01-28 - MVP-6: Cognição Completa (AF-11, AF-12, AO-18)
 
 ### 🧠 Major: First Synthetic Brain with Learning and Memory

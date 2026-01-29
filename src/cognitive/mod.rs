@@ -6,6 +6,11 @@
 //! - L-008: GD-QMN Transport (BOF/EOF family)
 //! - LEI-AF-10-08: Structured DNA (actions, CP vector, uncertainties)
 //! - AO-18: Origin marker (EXTERNAL/INTERNAL/RECOMBINED)
+//!
+//! # MVP-7 Integration
+//! - AF-11: Learning via CognitiveCycle
+//! - AF-12: MCI integrated in pipeline
+//! - LEI-AF-12-04: MCI participates in E3
 
 mod cycle;
 mod dna;

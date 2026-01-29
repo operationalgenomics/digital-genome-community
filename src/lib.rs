@@ -4,7 +4,7 @@
 //! Title: Digital Genome Community Edition - Core Library
 //! Author: Carlos Eduardo Favini
 //! Date: 2025-01-02
-//! Version: 0.6.0 (MVP-6: Cognição Completa)
+//! Version: 0.7.0 (MVP-7: Validação Final — Integração MCI)
 //! Description: Root module for the Digital Genome Community Edition.
 //! This is a synthetic cognitive core that perceives, observes,
 //! comprehends, learns, remembers, and emits DNA with Score. It does not act.
@@ -15,10 +15,11 @@
 //! that is semantically null, and its cognition is event-driven
 //! (activated by input, ended by output)."
 //!
-//! # MVP-6 Capabilities (AF-11, AF-12, AO-18)
-//! - **Aprender**: Incorporates Codons by strict CP improvement
-//! - **Lembrar**: MCI stores Codons indexed by context
-//! - **Reconhecer-se**: Origin marker distinguishes EXTERNAL/INTERNAL
+//! # MVP-7 Capabilities (Full Integration)
+//! - **Aprender**: MCI integrated in CognitiveCycle (AF-11)
+//! - **Lembrar**: MCI consulted during E3 (AF-12, LEI-AF-12-04)
+//! - **Reconhecer-se**: Origin tracks knowledge source (AO-18)
+//! - **Emitir**: Structured DNA with CP vector (LEI-AF-10-08)
 //!
 //! Layer: Community
 //! Dependencies: All internal modules
@@ -36,6 +37,8 @@
 //! 2025-01-02 - Carlos Eduardo Favini - Perceptual Maturation (v1.5.0)
 //! 2026-01-28 - Carlos Eduardo Favini - MVP-6: Cognição Completa (v0.6.0)
 //!              AF-11 (Aprendizado), AF-12 (MCI), AO-18 (Autorreferência)
+//! 2026-01-29 - Carlos Eduardo Favini - MVP-7: Validação Final (v0.7.0)
+//!              MCI integrado no CognitiveCycle, LEI-AF-12-04 completo
 //! --------------------------
 
 // =============================================================================

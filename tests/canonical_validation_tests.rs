@@ -62,7 +62,7 @@ fn test_af6_determinism_1000_replays() {
 /// AF-6: 1000 cognitive cycles MUST produce identical DNA
 #[test]
 fn test_af6_cognitive_cycle_1000_replays() {
-    let cycle = CognitiveCycle::new();
+    let mut cycle = CognitiveCycle::new();
     let ctx = MotorContext::default();
     
     let test_data: Vec<u8> = (0..500).map(|i| (i * 7 % 256) as u8).collect();
@@ -121,8 +121,8 @@ fn test_ao11_cross_instance_equivalence() {
 /// AO-11: Different cognitive cycle instances produce identical DNA
 #[test]
 fn test_ao11_cross_cycle_equivalence() {
-    let cycle1 = CognitiveCycle::new();
-    let cycle2 = CognitiveCycle::new();
+    let mut cycle1 = CognitiveCycle::new();
+    let mut cycle2 = CognitiveCycle::new();
     let ctx = MotorContext::default();
     
     let test_data: Vec<u8> = (0..100).map(|i| (i * 3) as u8).collect();
@@ -141,7 +141,7 @@ fn test_ao11_cross_cycle_equivalence() {
 /// B.1: Estado Basal Operacional - GDC is semantically null
 #[test]
 fn test_b1_estado_basal_operacional() {
-    let cycle = CognitiveCycle::new();
+    let mut cycle = CognitiveCycle::new();
     let ctx = MotorContext::default();
     
     // Empty input should produce valid output (not crash)
@@ -154,7 +154,7 @@ fn test_b1_estado_basal_operacional() {
 /// B.2: Não-Agência Absoluta - GDC does not act, only emits
 #[test]
 fn test_b2_nao_agencia_absoluta() {
-    let cycle = CognitiveCycle::new();
+    let mut cycle = CognitiveCycle::new();
     let ctx = MotorContext::default();
     
     let data = vec![1, 2, 3, 4, 5];
@@ -230,7 +230,7 @@ fn test_b5_determinismo_absoluto() {
 /// B.6: Transparência Operacional - All state is auditable
 #[test]
 fn test_b6_transparencia_operacional() {
-    let cycle = CognitiveCycle::new();
+    let mut cycle = CognitiveCycle::new();
     let ctx = MotorContext::default();
     
     let data = vec![10, 20, 30, 40, 50];
@@ -255,8 +255,8 @@ fn test_b6_transparencia_operacional() {
 /// B.7: Fronteira Community/Enterprise - GDC doesn't persist or execute
 #[test]
 fn test_b7_fronteira_community_enterprise() {
-    let cycle1 = CognitiveCycle::new();
-    let cycle2 = CognitiveCycle::new();
+    let mut cycle1 = CognitiveCycle::new();
+    let mut cycle2 = CognitiveCycle::new();
     let ctx = MotorContext::default();
     
     // Process in cycle1
@@ -278,7 +278,7 @@ fn test_b7_fronteira_community_enterprise() {
 /// LEI-AF-10-07: Meristic executes AFTER Praxis, Nash, Chaos
 #[test]
 fn test_lei_af10_07_motor_order() {
-    let cycle = CognitiveCycle::new();
+    let mut cycle = CognitiveCycle::new();
     let ctx = MotorContext::default();
     
     let output = cycle.process(&[1, 2, 3, 4, 5], &ctx);
@@ -358,7 +358,7 @@ fn rand_simple() -> f64 {
 /// Numerical: No NaN in any output
 #[test]
 fn test_numerical_no_nan() {
-    let cycle = CognitiveCycle::new();
+    let mut cycle = CognitiveCycle::new();
     let ctx = MotorContext::default();
     
     let edge_cases: Vec<Vec<u8>> = vec![
@@ -383,7 +383,7 @@ fn test_numerical_no_nan() {
 /// Numerical: No Infinity in any output
 #[test]
 fn test_numerical_no_infinity() {
-    let cycle = CognitiveCycle::new();
+    let mut cycle = CognitiveCycle::new();
     let ctx = MotorContext::default();
     
     let large_input: Vec<u8> = (0..10000).map(|i| (i % 256) as u8).collect();
