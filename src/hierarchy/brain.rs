@@ -63,7 +63,7 @@ pub struct Brain {
 ///
 /// Represents where in the cognitive cycle the brain currently is.
 /// The cycle always ends in Listening - the brain does not act.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
 pub enum CognitiveState {
     /// Receiving input from the world.
     Perceiving,
@@ -84,13 +84,8 @@ pub enum CognitiveState {
     Emitting,
 
     /// Waiting for next input. Default state.
+    #[default]
     Listening,
-}
-
-impl Default for CognitiveState {
-    fn default() -> Self {
-        Self::Listening
-    }
 }
 
 impl Brain {

@@ -333,7 +333,7 @@ impl OscillationDetector {
 }
 
 /// Complete cognitive observability system.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct CognitiveObservability {
     /// Health indicators
     pub health: HealthIndicators,
@@ -349,18 +349,6 @@ pub struct CognitiveObservability {
 
     /// Timestamp of last update
     pub last_updated_ns: u64,
-}
-
-impl Default for CognitiveObservability {
-    fn default() -> Self {
-        Self {
-            health: HealthIndicators::default(),
-            progress: ProgressTracker::default(),
-            divergence: DivergenceTracker::default(),
-            oscillation: OscillationDetector::default(),
-            last_updated_ns: 0,
-        }
-    }
 }
 
 impl CognitiveObservability {

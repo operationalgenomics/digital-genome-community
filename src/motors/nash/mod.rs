@@ -199,7 +199,7 @@ impl NashOutput {
 
     /// Creates a valid output.
     fn valid(epsilon_vector: Vec<u64>, eta_equilibrium: f64) -> Self {
-        let needs_clamping = eta_equilibrium < 0.0 || eta_equilibrium > 1.0 || !eta_equilibrium.is_finite();
+        let needs_clamping = !(0.0..=1.0).contains(&eta_equilibrium) || !eta_equilibrium.is_finite();
         let final_score = if needs_clamping {
             if eta_equilibrium.is_nan() { 0.0 } else { eta_equilibrium.clamp(0.0, 1.0) }
         } else {
@@ -365,6 +365,7 @@ impl NashMotor {
     /// Calculates expected utility for player i under current strategy profile.
     /// Note: `_player` parameter maintained for API symmetry with `expected_utility_pure_action`.
     /// The payoffs slice is already player-specific when passed to this function.
+    #[allow(clippy::needless_range_loop)]
     fn expected_utility(
         _player: usize,
         payoffs: &[i64],
@@ -388,6 +389,7 @@ impl NashMotor {
 
     /// Calculates expected utility for player i playing action a_i (pure strategy).
     /// Other players maintain their mixed strategies.
+    #[allow(clippy::needless_range_loop)]
     fn expected_utility_pure_action(
         player: usize,
         action: usize,

@@ -2,7 +2,7 @@
 //!
 //! # Canon Reference
 //! > "O GDC PODE incorporar Códons Canônicos por ciclo fechado que
-//!    satisfaça melhoria estrita de CP no mesmo contexto."
+//! > satisfaça melhoria estrita de CP no mesmo contexto."
 //!
 //! # Key Laws
 //! - LEI-AF-11-01: Epistemic trigger by stagnation (Meristic proposes)
@@ -232,6 +232,7 @@ impl LearningEngine {
     /// Create a candidate Codon from current cycle state.
     ///
     /// This is a helper for creating Codons from evaluation results.
+    #[allow(clippy::too_many_arguments)]
     pub fn create_candidate(
         &self,
         forma: Vec<u8>,

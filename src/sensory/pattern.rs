@@ -36,12 +36,24 @@ use std::sync::Mutex;
 // First call may involve auto-tuning; subsequent calls are deterministic
 static FFT_PLANNER: Mutex<Option<FftPlanner<f64>>> = Mutex::new(None);
 
-fn get_fft_planner() -> std::sync::MutexGuard<'static, Option<FftPlanner<f64>>> {
-    let mut guard = FFT_PLANNER.lock().unwrap();
-    if guard.is_none() {
-        *guard = Some(FftPlanner::new());
+/// Obtém o FFT planner de forma segura.
+/// 
+/// # Tratamento Canônico (VC-002)
+/// Se mutex estiver poisoned, retorna None.
+/// Chamadores devem tratar como estado canônico ZERO.
+fn get_fft_planner() -> Option<std::sync::MutexGuard<'static, Option<FftPlanner<f64>>>> {
+    match FFT_PLANNER.lock() {
+        Ok(mut guard) => {
+            if guard.is_none() {
+                *guard = Some(FftPlanner::new());
+            }
+            Some(guard)
+        }
+        Err(_poisoned) => {
+            // Mutex poisoned: retorna None, chamadores tratam como ZERO
+            None
+        }
     }
-    guard
 }
 
 /// Result of pattern-level analysis
@@ -133,6 +145,9 @@ impl PatternAnalysis {
     }
 
     /// Computes autocorrelation using FFT method
+    /// 
+    /// # Tratamento Canônico (VC-002)
+    /// Se mutex falhar, retorna vetor de zeros.
     fn compute_autocorrelation(values: &[f64]) -> Vec<f64> {
         let n = values.len();
         let fft_size = (2 * n).next_power_of_two();
@@ -148,9 +163,15 @@ impl PatternAnalysis {
             .collect();
         input.resize(fft_size, Complex::new(0.0, 0.0));
 
-        // Forward FFT
-        let mut planner_guard = get_fft_planner();
-        let planner = planner_guard.as_mut().unwrap();
+        // Forward FFT - tratamento canônico de falha de mutex
+        let mut planner_guard = match get_fft_planner() {
+            Some(guard) => guard,
+            None => return vec![0.0; n], // Estado canônico ZERO
+        };
+        let planner = match planner_guard.as_mut() {
+            Some(p) => p,
+            None => return vec![0.0; n], // Estado canônico ZERO
+        };
         let fft = planner.plan_fft_forward(fft_size);
         fft.process(&mut input);
 
@@ -220,6 +241,9 @@ impl PatternAnalysis {
     }
 
     /// Computes magnitude spectrum using FFT
+    /// 
+    /// # Tratamento Canônico (VC-002)
+    /// Se mutex falhar, retorna vetor vazio.
     fn compute_spectrum(values: &[f64]) -> Vec<f64> {
         let n = values.len();
         let fft_size = n.next_power_of_two();
@@ -235,9 +259,15 @@ impl PatternAnalysis {
             .collect();
         windowed.resize(fft_size, Complex::new(0.0, 0.0));
 
-        // FFT
-        let mut planner_guard = get_fft_planner();
-        let planner = planner_guard.as_mut().unwrap();
+        // FFT - tratamento canônico de falha de mutex
+        let mut planner_guard = match get_fft_planner() {
+            Some(guard) => guard,
+            None => return Vec::new(), // Estado canônico ZERO
+        };
+        let planner = match planner_guard.as_mut() {
+            Some(p) => p,
+            None => return Vec::new(), // Estado canônico ZERO
+        };
         let fft = planner.plan_fft_forward(fft_size);
         fft.process(&mut windowed);
         drop(planner_guard);

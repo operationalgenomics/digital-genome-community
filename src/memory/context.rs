@@ -21,7 +21,7 @@ use sha2::{Sha256, Digest};
 /// # Invariants
 /// - Same context + higher CP = dominance
 /// - Different contexts = incomparable
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize, PartialEq, Eq, Hash)]
 pub struct CanonicalContext {
     /// Problem class identifier (UNL code sequence)
     /// This is NOT a human string — it's a hash of the problem signature
@@ -70,18 +70,9 @@ impl CanonicalContext {
     /// Generate a combined fingerprint for indexing.
     pub fn fingerprint(&self) -> [u8; 32] {
         let mut hasher = Sha256::new();
-        hasher.update(&self.problem_class);
-        hasher.update(&self.initial_conditions);
+        hasher.update(self.problem_class);
+        hasher.update(self.initial_conditions);
         hasher.finalize().into()
-    }
-}
-
-impl Default for CanonicalContext {
-    fn default() -> Self {
-        Self {
-            problem_class: [0; 32],
-            initial_conditions: [0; 32],
-        }
     }
 }
 

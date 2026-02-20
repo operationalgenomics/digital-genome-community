@@ -347,9 +347,7 @@ impl KnowledgeChain {
 ## 5. REPRODUCTION / SPORE (53 linhas)
 
 **Arquivo original:** `reproduction/spore.rs`
-
 **Função:** Federação entre instâncias, propagação de conhecimento.
-
 **Por que é Enterprise:** Federação é infraestrutura distribuída.
 
 ```rust
@@ -358,7 +356,7 @@ impl KnowledgeChain {
 use uuid::Uuid;
 use serde::{Serialize, Deserialize};
 
-/// A Spore: A package for federated knowledge transfer.
+/// A Spore: A package for orchestrated knowledge transfer.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Spore {
     pub id: Uuid,
@@ -386,12 +384,12 @@ impl Spore {
     }
 }
 
-/// Federation Bus for spore distribution.
-pub struct FederationBus {
+/// Orchestration Bus for spore distribution.
+pub struct OrchestrationBus {
     pub pending_spores: Vec<Spore>,
 }
 
-impl FederationBus {
+impl OrchestrationBus {
     pub fn new() -> Self {
         Self { pending_spores: Vec::new() }
     }
@@ -659,7 +657,7 @@ pub fn rank<'a>(dnas: &'a [&'a GoldenDna]) -> Vec<&'a GoldenDna> {
 | CRISPR | 114 | MÉDIA |
 | Immune System | 76 | ALTA |
 | Blocknowledge | 94 | ALTA |
-| Spore/Federation | 53 | MÉDIA |
+| Spore/Orchestration | 53 | MÉDIA |
 | Genesis | 74 | ALTA |
 | Economy | 57 | BAIXA |
 | MMM Enterprise parts | ~100 | ALTA |

@@ -122,7 +122,7 @@ pub struct CortexOutput {
 /// - Discarded entirely
 ///
 /// What it CANNOT be:
-/// - Fed back into future perceptions as "memory"
+/// - Orchestrated back into future perceptions as "memory"
 /// - Used to modify the Community Edition's behavior
 /// - Stored internally by the Community Edition
 #[derive(Debug, Clone)]
@@ -460,11 +460,11 @@ impl SensoryCortex {
             let iter_start = Instant::now();
 
             // Check timeout
-            if config.iteration_timeout_ns > 0 {
-                if iter_start.elapsed().as_nanos() as u64 >= config.iteration_timeout_ns {
-                    maturation.mark_timeout();
-                    break;
-                }
+            if config.iteration_timeout_ns > 0
+                && iter_start.elapsed().as_nanos() as u64 >= config.iteration_timeout_ns
+            {
+                maturation.mark_timeout();
+                break;
             }
 
             // Perform another perception pass

@@ -39,9 +39,10 @@ use serde::{Deserialize, Serialize};
 /// Perceptual state of the sensory cortex.
 /// This is NOT a score - it is a cognitive state that determines
 /// how perception continues.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub enum PerceptualState {
     /// Initial/final state: waiting for input
+    #[default]
     Listening,
 
     /// Processing carrier signal (Level 0)
@@ -98,12 +99,6 @@ impl PerceptualState {
             Self::ProtoAgencyDetected { .. } => "ProtoAgencyDetected",
             Self::Emitting => "Emitting",
         }
-    }
-}
-
-impl Default for PerceptualState {
-    fn default() -> Self {
-        Self::Listening
     }
 }
 

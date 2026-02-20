@@ -120,10 +120,9 @@ impl MotorScores {
     /// Calculates Craft Performance using the non-compensatory formula.
     /// CP = M_P × M_N × M_C × M_M
     ///
-    /// If any motor is below threshold, CP is zero (absolute veto).
+    /// # Zero Ontológico (v0.8.5)
+    /// Se qualquer motor = 0.0, CP é zero (veto absoluto).
     pub fn calculate_cp(&self) -> f64 {
-        use crate::math::VETO_THRESHOLD;
-        
         // Check for veto before calculation
         if self.has_veto() {
             return 0.0;
@@ -131,22 +130,23 @@ impl MotorScores {
         
         let cp = self.praxeological * self.nash * self.chaotic * self.meristic;
         
-        // Final CP below threshold also triggers veto
-        if cp < VETO_THRESHOLD {
+        // Zero ontológico: CP = 0.0 dispara veto
+        if cp == 0.0 {
             return 0.0;
         }
         
         cp.clamp(0.0, 1.0)
     }
 
-    /// Checks if any motor triggered a veto (score below threshold).
+    /// Checks if any motor triggered a veto (score = 0.0).
+    /// 
+    /// # Zero Ontológico (v0.8.5)
+    /// Score EXATAMENTE 0.0 dispara veto absoluto.
     pub fn has_veto(&self) -> bool {
-        use crate::math::VETO_THRESHOLD;
-        
-        self.praxeological < VETO_THRESHOLD
-            || self.nash < VETO_THRESHOLD
-            || self.chaotic < VETO_THRESHOLD
-            || self.meristic < VETO_THRESHOLD
+        self.praxeological == 0.0
+            || self.nash == 0.0
+            || self.chaotic == 0.0
+            || self.meristic == 0.0
     }
 }
 

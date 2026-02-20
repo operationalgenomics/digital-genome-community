@@ -427,7 +427,7 @@ impl CognitiveMotor for MeristicMotor {
         );
 
         // Check if clamping is needed
-        let needs_clamping = raw_score < 0.0 || raw_score > 1.0 || !raw_score.is_finite();
+        let needs_clamping = !(0.0..=1.0).contains(&raw_score) || !raw_score.is_finite();
         let final_score = if needs_clamping {
             if raw_score.is_nan() { 0.0 } else { raw_score.clamp(0.0, 1.0) }
         } else {

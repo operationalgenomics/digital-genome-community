@@ -121,6 +121,7 @@ pub struct CommunityOutput {
 
 impl CommunityOutput {
     /// Creates a new CommunityOutput from components
+    #[allow(clippy::too_many_arguments)]
     pub fn new(
         cp_result: &CpResult,
         motor_praxis: f64,
@@ -139,7 +140,7 @@ impl CommunityOutput {
             CpResult::Valid {
                 value, was_clamped, ..
             } => (*value, false, None, *was_clamped),
-            CpResult::Vetoed { cause, .. } => (0.0, true, Some(cause.clone()), false),
+            CpResult::Vetoed { cause, .. } => (0.0, true, Some(*cause), false),
             CpResult::Invalid { .. } => (0.0, true, None, false),
         };
 

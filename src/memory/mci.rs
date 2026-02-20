@@ -2,7 +2,7 @@
 //!
 //! # Canon Reference
 //! > "A MCI é um sistema de memória interna não-observation que armazena
-//!    Códons Canônicos indexados por Contexto Canônico."
+//! > Códons Canônicos indexados por Contexto Canônico."
 //!
 //! # Key Properties
 //! - NOT observation (does not store raw inputs)
@@ -156,7 +156,7 @@ impl MCI {
         }
         
         // Insert Codon
-        let codons = self.codons.entry(context_key).or_insert_with(Vec::new);
+        let codons = self.codons.entry(context_key).or_default();
         
         // Remove dominated Codons before inserting
         codons.retain(|c| !codon.dominates(c));
@@ -244,7 +244,7 @@ impl MCI {
         for (key, codons) in &self.codons {
             hasher.update(key);
             for codon in codons {
-                hasher.update(&codon.fingerprint());
+                hasher.update(codon.fingerprint());
             }
         }
         

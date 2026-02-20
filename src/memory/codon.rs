@@ -18,20 +18,15 @@ use super::context::CanonicalContext;
 ///
 /// Distinguishes EXTERNAL (from perception) from INTERNAL (from MCI/Meristic).
 /// Must be deterministically assigned and consistent under replay.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Hash)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize, Hash)]
 pub enum Origin {
     /// State originated from external perception (E1)
+    #[default]
     External,
     /// State originated internally (MCI recall, Meristic proposal)
     Internal,
     /// State resulted from recombination of External + Internal
     Recombined,
-}
-
-impl Default for Origin {
-    fn default() -> Self {
-        Self::External
-    }
 }
 
 /// Evaluative Signature — Part of LEI-AF-12-01
@@ -88,7 +83,7 @@ impl Default for EvaluativeSignature {
 /// Activation Condition — Part of LEI-AF-12-01
 ///
 /// Specifies when this Codon is applicable.
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize, PartialEq, Eq)]
 pub struct ActivationCondition {
     /// Context in which this Codon was created
     pub context: CanonicalContext,
@@ -116,16 +111,6 @@ impl ActivationCondition {
             true
         };
         cp_ok && context_ok
-    }
-}
-
-impl Default for ActivationCondition {
-    fn default() -> Self {
-        Self {
-            context: CanonicalContext::default(),
-            min_cp_threshold: 0,
-            problem_class_bound: false,
-        }
     }
 }
 
@@ -252,8 +237,8 @@ impl CanonicalCodon {
     /// Generate unique fingerprint for this Codon.
     pub fn fingerprint(&self) -> [u8; 32] {
         let mut hasher = Sha256::new();
-        hasher.update(&self.forma_fingerprint);
-        hasher.update(&self.evidencia.cycle_id);
+        hasher.update(self.forma_fingerprint);
+        hasher.update(self.evidencia.cycle_id);
         hasher.update(self.assinatura.cp.to_le_bytes());
         hasher.finalize().into()
     }

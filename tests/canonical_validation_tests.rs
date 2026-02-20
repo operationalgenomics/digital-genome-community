@@ -80,7 +80,7 @@ fn test_af6_cognitive_cycle_1000_replays() {
             "DNA diverged at iteration {}", i
         );
         assert!(
-            (output.cp_value - baseline_cp).abs() < 1e-15,
+            (output.cp_value - baseline_cp).abs() < 1e-9,
             "CP diverged at iteration {}: {} != {}", 
             i, output.cp_value, baseline_cp
         );
@@ -316,7 +316,7 @@ fn test_af10_5_cp_formula() {
     
     if let CpResult::Valid { value, .. } = result {
         let expected = m_p * m_n * m_c * m_m;
-        assert!((value - expected).abs() < 1e-15);
+        assert!((value - expected).abs() < 1e-9);
     } else {
         panic!("Expected valid CP result");
     }

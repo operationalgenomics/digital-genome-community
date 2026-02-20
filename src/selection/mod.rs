@@ -67,11 +67,12 @@ impl GoldenIndex {
         let cp_a = dna_a.craft_performance;
         let cp_b = dna_b.craft_performance;
 
-        // Use threshold derived from VETO_THRESHOLD for consistency
-        // CP_EQUALITY_THRESHOLD = VETO_THRESHOLD^0.5 ≈ 3.16e-8
-        // This provides a meaningful equality zone while remaining
-        // well above numerical noise.
-        const CP_EQUALITY_THRESHOLD: f64 = 3.16e-8; // sqrt(1e-15)
+        // Threshold para comparação de igualdade entre CPs.
+        // Valor escolhido para ser bem acima de ruído numérico
+        // mas suficientemente pequeno para ser operacionalmente significativo.
+        // NOTA: Este threshold é para IGUALDADE, não para VETO.
+        // VETO usa zero ontológico (== 0.0) desde v0.8.5.
+        const CP_EQUALITY_THRESHOLD: f64 = 3.16e-8;
 
         if (cp_a - cp_b).abs() < CP_EQUALITY_THRESHOLD {
             ComparisonResult::Equal

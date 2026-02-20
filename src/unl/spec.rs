@@ -63,7 +63,7 @@ impl UnlSpec {
                 },
                 UnlInvariant {
                     id: "I003".into(),
-                    axiom: "motor < VETO_THRESHOLD ⟹ CP = 0".into(),
+                    axiom: "motor = 0.0 ⟹ CP = 0 (zero ontológico)".into(),
                 },
             ],
         }

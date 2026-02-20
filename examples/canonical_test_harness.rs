@@ -14,7 +14,7 @@ use digital_genome_community::{
     ReplayContext, BudgetGuard, ActionId,
 };
 use std::fs::{self, File};
-use std::io::{Read, Write, BufWriter};
+use std::io::{Write, BufWriter}; //use std::io::{Read, Write, BufWriter};
 use std::path::{Path, PathBuf};
 use std::time::{Instant, SystemTime};
 use std::sync::{Arc, Mutex};

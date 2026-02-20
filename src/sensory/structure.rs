@@ -325,11 +325,13 @@ impl StructureAnalysis {
         }
 
         // Remove adjacent change points
+        // VC-002: Sem unwrap() - usando is_none_or para tratamento seguro
         let mut filtered_points = Vec::new();
         for &cp in &change_points {
-            if filtered_points.is_empty()
-                || cp - *filtered_points.last().unwrap() > window * 2
-            {
+            let should_add = filtered_points
+                .last()
+                .is_none_or(|&last| cp - last > window * 2);
+            if should_add {
                 filtered_points.push(cp);
             }
         }

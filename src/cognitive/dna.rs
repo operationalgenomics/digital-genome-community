@@ -243,14 +243,14 @@ impl StructuredDNA {
         cycle_id: [u8; 16],
     ) -> [u8; 32] {
         let mut hasher = Sha256::new();
-        hasher.update(&cycle_id);
+        hasher.update(cycle_id);
         hasher.update(cp_task.to_le_bytes());
         hasher.update((actions.len() as u64).to_le_bytes());
         
         for action in actions {
             hasher.update(action.action_id.to_le_bytes());
-            hasher.update(&action.state_before);
-            hasher.update(&action.state_after);
+            hasher.update(action.state_before);
+            hasher.update(action.state_after);
             hasher.update(action.cp().to_le_bytes());
         }
         

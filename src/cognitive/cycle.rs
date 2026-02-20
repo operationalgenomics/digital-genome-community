@@ -378,7 +378,7 @@ impl CognitiveCycle {
             origin,
             input_fingerprint,
             self.hash_perception(&perception),
-            signature.clone(),
+            signature,
         );
         
         let mut builder = DnaBuilder::new(cycle_id, self.cycle_counter);

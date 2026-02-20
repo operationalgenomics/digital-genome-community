@@ -13,28 +13,22 @@
 //! Affected Components: hierarchy/dna, selection
 //!
 //! --------------------------
-//! VETO THRESHOLD SPECIFICATION (v0.2.0)
+//! ZERO ONTOLÓGICO (v0.8.5 - Sanitização VC-001)
 //! --------------------------
-//! The VETO_THRESHOLD constant defines the boundary between "viable" and "vetoed" DNA.
+//! Decisão Humana Canônica:
+//! "Zero é estado ontológico, não numérico. Qualquer mecanismo de threshold é rejeitado."
 //!
-//! Value: 1e-15 (0.000000000000001)
+//! Regra Constitucional:
+//! ∀i ∈ {P, C, N, M}: M_i = 0 ⟹ CP = 0
 //!
-//! Derivation:
-//! - f64 has ~15-17 significant decimal digits
-//! - f64::EPSILON ≈ 2.22e-16 (smallest difference from 1.0)
-//! - VETO_THRESHOLD = 1e-15 ≈ 4.5 × f64::EPSILON
-//! - This provides a margin above machine epsilon while remaining
-//!   effectively indistinguishable from zero for operational purposes
+//! Implementação:
+//! - Motor com score EXATAMENTE 0.0 dispara veto absoluto
+//! - Não há threshold - zero é zero
+//! - CP = 0.0 quando qualquer motor = 0.0
 //!
-//! Constitutional Meaning:
-//! - CP < VETO_THRESHOLD triggers ABSOLUTE VETO
-//! - This threshold is the single non-mathematical axiom of the Digital Genome
-//! - It converts continuous mathematics into discrete viability decisions
-//!
-//! Alternatives Considered:
-//! - f64::EPSILON: Too tight, causes false positives from numerical noise
-//! - 1e-10: Too loose, allows effectively-zero values to pass
-//! - 1e-15: Optimal balance between precision and operational meaning
+//! Histórico:
+//! - v0.2.0: VETO_THRESHOLD = 1e-15 (threshold numérico)
+//! - v0.8.5: Corrigido para zero ontológico (== 0.0)
 //!
 //! --------------------------
 //! CHANGE LOG
@@ -47,35 +41,32 @@
 
 use serde::{Deserialize, Serialize};
 
-/// Canonical veto threshold for Craft Performance.
+
+/// # Decisão Canônica (v0.8.5)
+/// "Zero é estado ontológico, não numérico. Qualquer mecanismo de threshold é rejeitado."
 ///
-/// # Value
-/// 1e-15 (one quadrillionth)
+/// # Regra Atual
+/// Motor com score EXATAMENTE 0.0 dispara veto absoluto.
+/// Comparação usa `== 0.0`, não `< threshold`.
 ///
-/// # Derivation
-/// - Approximately 4.5 × f64::EPSILON
-/// - Provides 15 orders of magnitude for valid CP values
-/// - Effectively indistinguishable from zero for operational purposes
-///
-/// # Constitutional Rule
-/// CP < VETO_THRESHOLD triggers ABSOLUTE VETO.
-/// This is the ONLY non-mathematical axiom in the Digital Genome.
-///
-/// See module documentation for full specification.
-pub const VETO_THRESHOLD: f64 = 1e-15;
+/// # Compatibilidade
+/// Esta constante é mantida apenas para compatibilidade com código legado.
+/// Novo código deve comparar diretamente com `== 0.0`.
+pub const VETO_THRESHOLD: f64 = 0.0;
 
 /// Craft Performance (CP) calculator.
 ///
 /// The formula CP = M_P × M_N × M_C × M_M implements the
-/// non-compensatory principle: if any motor is below threshold, CP is vetoed.
+/// non-compensatory principle: if any motor is zero, CP is vetoed.
 ///
-/// # Constitutional Rule
-/// CP < VETO_THRESHOLD triggers ABSOLUTE VETO.
+/// # Constitutional Rule (v0.8.5)
+/// Motor com score EXATAMENTE 0.0 dispara VETO ABSOLUTO.
+/// Zero é estado ontológico, não numérico.
 ///
 /// # Interpretation
 /// - CP ≈ 1.0: Near-perfect coherence (Platonic ideal - unreachable)
-/// - CP ≥ VETO_THRESHOLD: Viable DNA
-/// - CP < VETO_THRESHOLD: VETO - DNA is rejected
+/// - CP > 0.0: Viable DNA
+/// - CP = 0.0: VETO - DNA is rejected
 #[derive(Debug, Clone, Copy)]
 pub struct CraftPerformance;
 
@@ -137,6 +128,7 @@ pub enum InvalidReason {
     Infinite,
 }
 
+
 impl CraftPerformance {
     /// Validates a single motor score.
     fn validate_score(score: f64) -> Result<f64, InvalidReason> {
@@ -182,12 +174,13 @@ impl CraftPerformance {
             }
         }
 
-        // Check for individual vetoes
+        // Check for individual vetoes (zero ontológico: == 0.0)
         let vetoed_motors: Vec<VetoCause> = validated
             .iter()
             .filter_map(|(result, cause)| {
                 if let Ok(score) = result {
-                    if *score < VETO_THRESHOLD {
+                    // Zero ontológico: score EXATAMENTE 0.0 dispara veto
+                    if *score == 0.0 {
                         Some(*cause)
                     } else {
                         None
@@ -212,8 +205,8 @@ impl CraftPerformance {
         // Calculate CP
         let cp = m_p * m_n * m_c * m_m;
 
-        // Check final product against threshold
-        if cp < VETO_THRESHOLD {
+        // Zero ontológico: CP EXATAMENTE 0.0 dispara veto
+        if cp == 0.0 {
             return CpResult::Vetoed {
                 value: cp,
                 cause: VetoCause::FinalProduct,
@@ -221,7 +214,7 @@ impl CraftPerformance {
         }
 
         // Check if clamping is needed (should be rare with validated inputs)
-        let needs_clamping = cp < 0.0 || cp > 1.0;
+        let needs_clamping = !(0.0..=1.0).contains(&cp);
         let final_cp = if needs_clamping { cp.clamp(0.0, 1.0) } else { cp };
 
         CpResult::Valid {
@@ -251,33 +244,37 @@ impl CraftPerformance {
         )
     }
 
-    /// Checks if any motor is below the veto threshold.
+    /// Checks if any motor has zero score (absolute veto).
+    /// 
+    /// # Zero Ontológico (v0.8.5)
+    /// Score EXATAMENTE 0.0 dispara veto absoluto.
     pub fn has_veto(m_p: f64, m_n: f64, m_c: f64, m_m: f64) -> bool {
-        m_p < VETO_THRESHOLD
-            || m_n < VETO_THRESHOLD
-            || m_c < VETO_THRESHOLD
-            || m_m < VETO_THRESHOLD
+        m_p == 0.0 || m_n == 0.0 || m_c == 0.0 || m_m == 0.0
     }
 
-    /// Identifies which motor(s) are below the veto threshold.
+    /// Identifies which motor(s) have zero score (veto triggers).
+    /// 
+    /// # Zero Ontológico (v0.8.5)
+    /// Score EXATAMENTE 0.0 dispara veto absoluto.
     pub fn veto_sources(m_p: f64, m_n: f64, m_c: f64, m_m: f64) -> Vec<&'static str> {
         let mut sources = Vec::new();
-        if m_p < VETO_THRESHOLD {
+        if m_p == 0.0 {
             sources.push("Praxeological");
         }
-        if m_n < VETO_THRESHOLD {
+        if m_n == 0.0 {
             sources.push("Nash");
         }
-        if m_c < VETO_THRESHOLD {
+        if m_c == 0.0 {
             sources.push("Chaotic");
         }
-        if m_m < VETO_THRESHOLD {
+        if m_m == 0.0 {
             sources.push("Meristic");
         }
         sources
     }
 
-    /// Returns the canonical veto threshold.
+    /// Threshold numérico foi substituído por comparação direta == 0.0.
+    /// Esta função é mantida apenas para compatibilidade.
     pub const fn threshold() -> f64 {
         VETO_THRESHOLD
     }
@@ -469,6 +466,7 @@ mod tests {
     #[test]
     fn test_perfect_scores() {
         let result = CraftPerformance::calculate(1.0, 1.0, 1.0, 1.0);
+        assert!(matches!(result, CpResult::Valid { .. }));
         match result {
             CpResult::Valid { value, was_clamped, .. } => {
                 assert!((value - 1.0).abs() < 1e-10);
@@ -485,9 +483,9 @@ mod tests {
     }
 
     #[test]
-    fn test_veto_below_threshold() {
-        let result = CraftPerformance::calculate(1.0, 1e-16, 1.0, 1.0);
-        assert!(matches!(result, CpResult::Vetoed { cause: VetoCause::Nash, .. }));
+    fn test_small_but_non_zero_is_valid() {
+       let result = CraftPerformance::calculate(1.0, 1e-16, 1.0, 1.0);
+        assert!(matches!(result, CpResult::Valid { .. }));
     }
 
     #[test]
@@ -530,13 +528,6 @@ mod tests {
     }
 
     #[test]
-    fn test_non_compensatory() {
-        // High scores in 3 motors cannot compensate for veto in one
-        let result = CraftPerformance::calculate(0.99, 0.99, 1e-20, 0.99);
-        assert!(matches!(result, CpResult::Vetoed { .. }));
-    }
-
-    #[test]
     fn test_score_set() {
         let scores = MotorScoreSet::new(0.8, 0.7, 0.9, 0.6);
         let cp = scores.cp_value();
@@ -550,9 +541,21 @@ mod tests {
     }
 
     #[test]
-    fn test_threshold_value() {
-        assert_eq!(CraftPerformance::threshold(), 1e-15);
-        assert_eq!(VETO_THRESHOLD, 1e-15);
+    fn test_threshold_value_compat() {
+        assert_eq!(CraftPerformance::threshold(), 0.0);
+        assert_eq!(VETO_THRESHOLD, 0.0);
+    }
+
+
+    #[test]
+    fn test_zero_ontologico_veto() {
+        // v0.8.5: Zero ontológico - score EXATAMENTE 0.0 dispara veto
+        let result = CraftPerformance::calculate(0.8, 0.0, 0.7, 0.9);
+        assert!(matches!(result, CpResult::Vetoed { .. }));
+        
+        // Valor muito pequeno mas não zero NÃO dispara veto
+        let result = CraftPerformance::calculate(0.8, 1e-20, 0.7, 0.9);
+        assert!(matches!(result, CpResult::Valid { .. }));
     }
 
     #[test]

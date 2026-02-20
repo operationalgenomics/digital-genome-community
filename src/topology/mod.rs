@@ -101,7 +101,11 @@ impl SynapticGraph {
             .insert(dna_id)
         {
             // First time seeing this synapse
-            if !self.synapse_to_dnas.get(&synapse_id).map_or(false, |s| s.len() > 1) {
+            if self
+                .synapse_to_dnas
+                .get(&synapse_id)
+                .is_none_or(|s| s.len() <= 1)
+            {
                 self.synapse_count += 1;
             }
         }

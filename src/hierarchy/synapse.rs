@@ -127,7 +127,7 @@ impl SynapticWeight {
     /// # Returns
     /// Some(SynapticWeight) if base is valid, None otherwise.
     pub fn new(base: f64) -> Option<Self> {
-        if base.is_nan() || base.is_infinite() || base < 0.0 || base > 1.0 {
+        if base.is_nan() || base.is_infinite() || !(0.0..=1.0).contains(&base) {
             return None;
         }
 
