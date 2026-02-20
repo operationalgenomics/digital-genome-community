@@ -62,7 +62,7 @@ Tensões que foram identificadas e formalmente resolvidas no Canon:
 
 ## T-RES-01 — AF-7 vs AF-12 (Observação vs Memória)
 
-**Tensão:** AF-7 (Externalidade da Observation) proíbe persistência longa no GDC. AF-12 (MCI) estabelece memória cognitiva interna como necessária para aprendizado.
+**Tensão:** AF-7 (Externalidade da Observation) proíbe observation externa (logs, telemetria, registros exportáveis) dentro do core. AF-12 (MCI) estabelece estado cognitivo ativo como necessário para aprendizado.
 
 **Resolução:** Emenda Canônica v2.0 de AF-7 distingue:
 - **Observation externa** (logs, telemetria, registros exportáveis) → PROIBIDA no core

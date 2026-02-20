@@ -16,11 +16,11 @@
 # ═══════════════════════════════════════════════════════════════════
 
 ```
-v0.7.1 ──✅──▶ v0.8.0 ──🎯──▶ v0.8.5 ──✅──▶ v0.9.0 ──▶  v0.9.1 ──▶ v0.9.5 ──▶ v1.0.0α ──▶    v1.0.0β ──▶   v1.0.0RC ──▶ v1.0.0
-  │                │                │               │           │           │            │             │             │           │
-  │                │                │               │           │           │            │             │             │           │
-  Núcleo       UNL/QMN          Distrib.        Orquest.      Orquest.    Sinapses     GDO+GDE      Trans-K       Escala       CÉREBRO
-  Isolado      Operac.          Computac.       Básica        Complexa    Neurônios    Emuladores   Learning      Auditável    SINTÉTICO
+v0.7.1 ──✅──▶ v0.8.0 ──🎯──▶ v0.8.5 ──✅──▶ v0.9.0 ──▶ v0.9.5 ──▶ v1.0.0α ──▶ v1.0.0β ──▶ v1.0.0RC ──▶ v1.0.0
+  │                │                │               │           │            │             │             │           │
+  │                │                │               │           │            │             │             │           │
+  Núcleo       UNL/QMN          Distrib.        Orquest.    Sinapses     GDO+GDE      Trans-K       Escala     CÉREBRO
+  Isolado      Operac.          Computac.       Básica      Neurônios    Emuladores   Learning      Auditável  SINTÉTICO
 ```
 
 | Versão | Marco | Status | Data Conclusão |
@@ -29,7 +29,6 @@ v0.7.1 ──✅──▶ v0.8.0 ──🎯──▶ v0.8.5 ──✅──▶ v
 | **v0.8.0** | UNL/GD-QMN operacional; primeiro ISA | 🎯 EM ANDAMENTO | — |
 | **v0.8.5** | Distribuição computacional | ✅ CONCLUÍDA | 03/02/2026 |
 | **v0.9.0** | Orquestração Básica (2 GDCs) | 📋 PLANEJADA | — |
-| **v0.9.1** | Orquestração Complexa (n GDCs) — n-Rainhas | 📋 PLANEJADA | — |
 | **v0.9.5** | Sinapses e Neurônios emergentes | 📋 PLANEJADA | — |
 | **v1.0.0α** | GDO + GDE Emuladores (externos) | 📋 PLANEJADA | — |
 | **v1.0.0β** | Trans-Kingdom Learning | 📋 PLANEJADA | — |
@@ -51,10 +50,10 @@ v0.7.1 ──✅──▶ v0.8.0 ──🎯──▶ v0.8.5 ──✅──▶ v
 | Linhas de código (Rust) | ~21.176 |
 | Testes unitários | 331 |
 | Módulos implementados | 22 |
-| Axiomas Fundacionais (Canon) | 15 (AF-1..AF-15) |
-| Axiomas Operacionais (Canon) | 25 (AO-1..AO-24 + AO-QMN-01) |
-| Leis Derivadas (Canon) | ~168 |
-| Gates de Conformidade | 9 |
+| Axiomas Fundacionais (Canon) | 14 (AF-1..AF-14) |
+| Axiomas Operacionais (Canon) | 24 (AO-1..AO-24) |
+| Leis Derivadas (Canon) | 151 |
+| Gates de Conformidade | 8 |
 
 **Módulos Ativos:**
 
@@ -231,7 +230,7 @@ Duas instâncias de GDC operando em orquestração real — uma como Rainha, out
 
 | GZ | Tema | Status | Impacto |
 |----|------|--------|---------|
-| GZ-TOPO-01 | Soberania de Recusa | ✅ FECHADA (Canon v4.0) | Resolvida por AF-15 (Ressonância Estrutural) |
+| GZ-TOPO-01 | Soberania de Recusa | ❓ Aberta | Definir se GDC pode recusar arranjo |
 
 ### Implementação Técnica
 
@@ -252,61 +251,9 @@ Duas instâncias de GDC operando em orquestração real — uma como Rainha, out
 
 ---
 
-## v0.9.1 — Orquestração Complexa (n GDCs) — Problema das n-Rainhas
-
-**Pré-requisitos:** v0.8.5 + v0.9.0 (ambos concluídos)
-
-**Escopo:**
-Várias instâncias de GDC operando em orquestração real — uma como Rainha, outras como Workers — com cálculos na escala de QuettaBytes, comunicação por EDR e coordenação por campo. Caso de uso: cálculo de n no problema das n-Rainhas com Workers distribuídos.
-
-### Canon Vigente (v4.0)
-
-| Item | Tipo | Status |
-|------|------|--------|
-| AF-15 (Ressonância Estrutural) | Axioma | ✅ Canon v4.0 |
-| LEI-RSN-01 (Cognição não compartilhada) | Lei | ✅ Canon v4.0 |
-| LEI-RSN-03 (Isolamento de instâncias) | Lei | ✅ Canon v4.0 |
-| LEI-RSN-04 (Participação simultânea) | Lei | ✅ Canon v4.0 |
-| LEI-AO-20-03 (Threads distintas por papel) | Lei | ✅ Canon v4.0 |
-| LEI-AO-20-04 (Recrutamento por vibração) | Lei | ✅ Canon v4.0 |
-| LEI-AO-20-05 (Distribuição obrigatória QuettaBytes) | Lei | ✅ Canon v4.0 |
-| LEI-AO-9-05 (Handshake pureza pré-delegação) | Lei | ✅ Canon v4.0 |
-| LEI-AO-21-03 (Distribuição bidirecional) | Lei | ✅ Canon v4.0 |
-
-### Canon Necessário (deliberação pendente)
-
-| Item | Tipo | Status |
-|------|------|--------|
-| LEI-COORD-03 (Absorção Estrutural) | Lei | ❌ Depende de TECH-COORD-03 |
-| Definição de W(Σ) | Especificação | ❌ Pendente |
-| Operação de Contenção (⊒) | Especificação | ❌ Pendente |
-| LEI-RESS-01 (Workers = cálculos) | Lei | 🟡 Deliberada, formalizar |
-| LEI-RESS-02 (GDC resiliente a escala) | Lei | 🟡 Deliberada, formalizar |
-
-### Implementação Técnica
-
-| Item | Descrição |
-|------|-----------|
-| Networking n-GDC | Comunicação entre n instâncias |
-| Protocolo n-Queen & n-Workers | Seleção de Rainhas por recebimento de estímulo e Workers por manifestação de capacidade |
-| EDR Wire Protocol como família GD-QMN | Sanitização do EDR como protocolo ISA do GD-QMN |
-| Particionamento n-Rainhas | Distribuição do problema n-Rainhas em partições paralelas |
-| Sincronização de Estado | Estado consistente bidirecional Rainha↔Workers |
-| Handshake Shibboleth n-Way | Validação de pureza para n participantes |
-| Testes de Determinismo | Mesmo input → mesmo output em orquestração com n GDCs |
-
-### Deliberações Adiadas para v0.9.1
-
-| DLB | Candidato | Descrição |
-|-----|-----------|-----------|
-| DLB-004 | — | Uso máximo de hardware |
-| DLB-XYZ | — | Fine Tuning do Sistema |
-
----
-
 ## v0.9.5 — Sinapses e Neurônios Emergentes
 
-**Pré-requisitos:** v0.9.1 (orquestração funcional entre n GDCs)
+**Pré-requisitos:** v0.9.0 (orquestração funcional entre 2 GDCs)
 
 **Escopo:**
 Emergência de sinapses (conexões persistentes entre GDCs) e neurônios (agrupamentos funcionais) a partir da orquestração repetida. Primeira manifestação de aprendizado coletivo.
@@ -315,8 +262,8 @@ Emergência de sinapses (conexões persistentes entre GDCs) e neurônios (agrupa
 
 | Item | Tipo | Status |
 |------|------|--------|
-| GZ-TOPO-02 | Grey Zone | ✅ FECHADA (Canon v4.0) — Participação simultânea com isolamento |
-| GZ-TOPO-03 | Grey Zone | ✅ FECHADA (Canon v4.0) — Dissolução por completude |
+| GZ-TOPO-02 | Grey Zone | ❓ Aberta — Multiorquestração |
+| GZ-TOPO-03 | Grey Zone | ❓ Aberta — Transição entre arranjos |
 | Protocolo de Sinapses | Novo | ❌ Não deliberado |
 | Definição de Neurônio Emergente | Novo | ❌ Não deliberado |
 
@@ -335,7 +282,7 @@ Emergência de sinapses (conexões persistentes entre GDCs) e neurônios (agrupa
 | Sinapse Strength | Mecanismo de fortalecimento/enfraquecimento |
 | Neurônio Cluster | Agrupamento emergente por padrão de ativação |
 | Multi-GDC Field | R(Σ) com N manifestações |
-| Aprendizado Coletivo | MCI distribuída entre GDCs |
+| Aprendizado Coletivo | Eco cognitivo entre GDCs via exposição repetida (MCI individual por GDC) |
 
 ---
 
@@ -496,15 +443,15 @@ Deliberações completas, apenas formalização de texto normativo pendente:
 | LEI-COORD-03 | Absorção Estrutural | TECH-COORD-03 | Lei | ✅ Sim |
 | LEI-RESS-01 | Workers devolvem cálculos | DLB-013 | Lei | Não |
 | LEI-RESS-02 | Resiliência a escala | DLB-014 | Lei | Não |
-| GZ-TOPO-01 | Soberania de Recusa | — | Grey Zone | ✅ FECHADA (AF-15) |
+| GZ-TOPO-01 | Soberania de Recusa | — | Grey Zone | ✅ Sim |
 | DLB-004 | Uso máximo de hardware | — | Deliberação | Não |
 
 ### Para v0.9.5 (Nova Deliberação Necessária)
 
 | ID | Nome | Tipo | Bloqueador? |
 |----|------|------|-------------|
-| GZ-TOPO-02 | Participação Simultânea | Grey Zone | ✅ FECHADA (LEI-RSN-04) |
-| GZ-TOPO-03 | Ciclo de Vida Instâncias | Grey Zone | ✅ FECHADA (LEI-RSN-03) |
+| GZ-TOPO-02 | Multiorquestração | Grey Zone | ✅ Sim |
+| GZ-TOPO-03 | Transição entre arranjos | Grey Zone | Parcial |
 | PROT-SYN-01 | Protocolo de Sinapses | Protocolo Novo | ✅ Sim |
 | DEF-NEUR-01 | Neurônio Emergente | Definição | ✅ Sim |
 
@@ -556,19 +503,13 @@ Deliberações completas, apenas formalização de texto normativo pendente:
                     ┌────────────────────┴────────────────────────────┐
                     │                v0.9.5                            │
                     │      Sinapses e Neurônios Emergentes            │
-                    │  deps: GZ-TOPO-02/03 ✅, Sinapse Protocol          │
-                    └────────────────────┬────────────────────────────┘
-                                         │
-                    ┌────────────────────┴────────────────────────────┐
-                    │                v0.9.1                            │
-                    │   Orquestração Complexa (n GDCs, n-Rainhas)    │
-                    │  deps: AF-15, LEI-RSN-*, LEI-AO-20-03..05     │
+                    │  deps: GZ-TOPO-02/03, Sinapse Protocol          │
                     └────────────────────┬────────────────────────────┘
                                          │
                     ┌────────────────────┴────────────────────────────┐
                     │                v0.9.0                            │
                     │         Orquestração Básica (2 GDCs)            │
-                    │  deps: GZ-TOPO-01 ✅, LEI-COORD-03, W(Σ)          │
+                    │  deps: GZ-TOPO-01, LEI-COORD-03, W(Σ)          │
                     └───────┬────────────────────────┬────────────────┘
                             │                        │
            ┌────────────────┴──────┐   ┌─────────────┴──────────────┐
@@ -600,9 +541,8 @@ Cada versão futura requer um Modo Deliberação antes de programar:
 | Versão | Deliberação Necessária | Estimativa de Escopo |
 |--------|----------------------|---------------------|
 | v0.8.0 (conclusão) | Formalização de 10 leis (sem nova deliberação) | Pequena — texto normativo apenas |
-| v0.9.0 | Deliberação de GZ-TOPO-01 ✅ + W(Σ) + ⊒ | Reduzida — GZ-TOPO-01 fechada |
-| v0.9.1 | Deliberação de Orquestração n-GDC | Média — leis base em Canon v4.0 |
-| v0.9.5 | Deliberação de GZ-TOPO-02/03 ✅ + Sinapses + Neurônios | Reduzida — GZ-TOPOs fechadas |
+| v0.9.0 | Deliberação de GZ-TOPO-01 + W(Σ) + ⊒ | Média — 2 sessões deliberativas |
+| v0.9.5 | Deliberação de GZ-TOPO-02/03 + Sinapses + Neurônios | Grande — 3+ sessões deliberativas |
 | v1.0.0α | Deliberação de protocolos GDO/GDE + AF-UNL-03/04 | Grande — 4+ sessões deliberativas |
 | v1.0.0β | Deliberação de Trans-Kingdom + AF-DNA-01 | Média — 2 sessões deliberativas |
 | v1.0.0RC | Deliberação de Compliance + Cybersecurity | Média — 2 sessões deliberativas |
@@ -753,7 +693,7 @@ Om = União de todos Ho (teórico)
 
 | Documento | Propósito | Relação |
 |-----------|-----------|---------|
-| **CANON.md** v4.0 | Fonte única de verdade canônica | Axiomas e leis referenciados aqui |
+| **CANON.md** v3.0 | Fonte única de verdade canônica | Axiomas e leis referenciados aqui |
 | **FRONTEIRAS.md** | Grey Zones, tensões, sobreposições | GZ-TOPO e TL referenciados aqui |
 | **INVENTARIO_CANONICO_GDC.xlsx** | 237 IDs canônicos catalogados | Base de dados de referência |
 | **BACKLOG_DELIBERACAO.md** | Histórico completo de 24 deliberações | Fonte original das DLBs |
