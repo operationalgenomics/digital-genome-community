@@ -115,7 +115,7 @@ impl CanonicalId {
 
         // Hash de todos os inputs de forma determinística
         hasher.update(context.as_bytes());
-        hasher.update(&sequence.to_le_bytes());
+        hasher.update(sequence.to_le_bytes());
         hasher.update(payload);
 
         let hash = hasher.finalize();
@@ -157,7 +157,7 @@ impl CanonicalId {
     /// // Output: "a3f2b1c4..." (32 chars hex)
     /// ```
     pub fn to_hex(&self) -> String {
-        hex::encode(&self.0)
+        hex::encode(self.0)
     }
 
     /// Criar ID "zero" (usado como placeholder ou valor inicial)

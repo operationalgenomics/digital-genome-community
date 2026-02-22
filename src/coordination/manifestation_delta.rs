@@ -24,6 +24,12 @@ impl GdcId {
     }
 }
 
+impl Default for GdcId {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 /// Manifestação Delta (v1.0.0δ).
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ManifestationDelta {

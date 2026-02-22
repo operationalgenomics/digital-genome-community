@@ -64,10 +64,7 @@ impl WeavingEngine {
     ///
     /// Canon: Especificação ⊒ - Completude estrutural
     pub fn is_complete(&self) -> bool {
-        match &self.woven_state {
-            WovenState::Complete { .. } => true,
-            _ => false,
-        }
+        matches!(&self.woven_state, WovenState::Complete { .. })
     }
     
     /// Computar tecelagem progressiva.
