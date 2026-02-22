@@ -4,13 +4,23 @@
 //! Title: Pattern Analysis (Level 1)
 //! Author: Carlos Eduardo Favini
 //! Date: 2025-01-02
-//! Version: 1.2.0
+//! Version: 1.3.0
 //! Description: Level 1 of the abstraction hierarchy.
 //! Detects repetition and rhythm through autocorrelation.
 //! Identifies periodicity in signals.
 //! Layer: Community
 //! Dependencies: rustfft
 //! Affected Components: sensory/signals
+//!
+//! --------------------------
+//! CANONICAL COMPLIANCE v1.0.1 Fase 3
+//! --------------------------
+//! REMOVIDO: static FFT_PLANNER global (violação QM-01)
+//! ADICIONADO: Dependency injection de FftPlanner
+//!
+//! Conformidade:
+//! - QM-01 (Pureza): FftPlanner vem de parâmetro, não estado global
+//! - QM-02 (Replay): Determinístico (sem estado global)
 //!
 //! --------------------------
 //! MATHEMATICAL BASIS
@@ -27,34 +37,10 @@
 //! CHANGE LOG
 //! --------------------------
 //! 2025-01-02 - Carlos Eduardo Favini - Initial creation (v1.1.0)
+//! 2026-02-22 - Carlos Eduardo Favini - Removed global FFT_PLANNER (v1.3.0 - Fase 3)
 //! --------------------------
 
 use rustfft::{num_complex::Complex, FftPlanner};
-use std::sync::Mutex;
-
-// Persistent FFT planner for deterministic behavior
-// First call may involve auto-tuning; subsequent calls are deterministic
-static FFT_PLANNER: Mutex<Option<FftPlanner<f64>>> = Mutex::new(None);
-
-/// Obtém o FFT planner de forma segura.
-/// 
-/// # Tratamento Canônico (VC-002)
-/// Se mutex estiver poisoned, retorna None.
-/// Chamadores devem tratar como estado canônico ZERO.
-fn get_fft_planner() -> Option<std::sync::MutexGuard<'static, Option<FftPlanner<f64>>>> {
-    match FFT_PLANNER.lock() {
-        Ok(mut guard) => {
-            if guard.is_none() {
-                *guard = Some(FftPlanner::new());
-            }
-            Some(guard)
-        }
-        Err(_poisoned) => {
-            // Mutex poisoned: retorna None, chamadores tratam como ZERO
-            None
-        }
-    }
-}
 
 /// Result of pattern-level analysis
 #[derive(Debug, Clone)]
@@ -86,13 +72,30 @@ pub struct PatternAnalysis {
 
 impl PatternAnalysis {
     /// Analyzes pattern/periodicity in a signal
-    pub fn analyze(values: &[f64]) -> Self {
+    ///
+    /// ## Mudança v1.0.1 Fase 3 (BREAKING CHANGE)
+    ///
+    /// Agora requer `fft_planner` como parâmetro (dependency injection).
+    /// Isto elimina estado global e garante pureza (QM-01).
+    ///
+    /// ## Parâmetros
+    ///
+    /// - `values`: Signal data
+    /// - `fft_planner`: FFT planner fornecido pelo chamador (não mais global)
+    ///
+    /// ## Exemplo
+    ///
+    /// ```ignore
+    /// let mut planner = FftPlanner::new();
+    /// let analysis = PatternAnalysis::analyze(signal, &mut planner);
+    /// ```
+    pub fn analyze(values: &[f64], fft_planner: &mut FftPlanner<f64>) -> Self {
         if values.len() < 4 {
             return Self::empty();
         }
 
         // Compute autocorrelation
-        let autocorr = Self::compute_autocorrelation(values);
+        let autocorr = Self::compute_autocorrelation(values, fft_planner);
 
         // Find maximum autocorrelation (excluding lag 0)
         let (max_autocorr, max_lag) = Self::find_max_autocorrelation(&autocorr);
@@ -113,7 +116,7 @@ impl PatternAnalysis {
             (periodicity_significance > 3.0 || max_autocorr > 0.9) && max_lag > 0;
 
         // Compute spectrum
-        let spectrum = Self::compute_spectrum(values);
+        let spectrum = Self::compute_spectrum(values, fft_planner);
         let spectral_centroid = Self::compute_spectral_centroid(&spectrum);
         let spectral_flatness = Self::compute_spectral_flatness(&spectrum);
         let dominant_frequency_index = Self::find_dominant_frequency(&spectrum);
@@ -145,10 +148,11 @@ impl PatternAnalysis {
     }
 
     /// Computes autocorrelation using FFT method
-    /// 
-    /// # Tratamento Canônico (VC-002)
-    /// Se mutex falhar, retorna vetor de zeros.
-    fn compute_autocorrelation(values: &[f64]) -> Vec<f64> {
+    ///
+    /// ## Mudança v1.0.1 Fase 3
+    ///
+    /// Agora aceita `fft_planner` por parâmetro (puro, sem estado global).
+    fn compute_autocorrelation(values: &[f64], fft_planner: &mut FftPlanner<f64>) -> Vec<f64> {
         let n = values.len();
         let fft_size = (2 * n).next_power_of_two();
 
@@ -163,16 +167,8 @@ impl PatternAnalysis {
             .collect();
         input.resize(fft_size, Complex::new(0.0, 0.0));
 
-        // Forward FFT - tratamento canônico de falha de mutex
-        let mut planner_guard = match get_fft_planner() {
-            Some(guard) => guard,
-            None => return vec![0.0; n], // Estado canônico ZERO
-        };
-        let planner = match planner_guard.as_mut() {
-            Some(p) => p,
-            None => return vec![0.0; n], // Estado canônico ZERO
-        };
-        let fft = planner.plan_fft_forward(fft_size);
+        // Forward FFT - usando planner fornecido (canônico)
+        let fft = fft_planner.plan_fft_forward(fft_size);
         fft.process(&mut input);
 
         // Power spectrum (|FFT|²)
@@ -181,9 +177,8 @@ impl PatternAnalysis {
         }
 
         // Inverse FFT
-        let ifft = planner.plan_fft_inverse(fft_size);
+        let ifft = fft_planner.plan_fft_inverse(fft_size);
         ifft.process(&mut input);
-        drop(planner_guard);
 
         // Normalize and extract real part
         let var: f64 = centered.iter().map(|v| v * v).sum();
@@ -241,10 +236,11 @@ impl PatternAnalysis {
     }
 
     /// Computes magnitude spectrum using FFT
-    /// 
-    /// # Tratamento Canônico (VC-002)
-    /// Se mutex falhar, retorna vetor vazio.
-    fn compute_spectrum(values: &[f64]) -> Vec<f64> {
+    ///
+    /// ## Mudança v1.0.1 Fase 3
+    ///
+    /// Agora aceita `fft_planner` por parâmetro (puro, sem estado global).
+    fn compute_spectrum(values: &[f64], fft_planner: &mut FftPlanner<f64>) -> Vec<f64> {
         let n = values.len();
         let fft_size = n.next_power_of_two();
 
@@ -259,18 +255,9 @@ impl PatternAnalysis {
             .collect();
         windowed.resize(fft_size, Complex::new(0.0, 0.0));
 
-        // FFT - tratamento canônico de falha de mutex
-        let mut planner_guard = match get_fft_planner() {
-            Some(guard) => guard,
-            None => return Vec::new(), // Estado canônico ZERO
-        };
-        let planner = match planner_guard.as_mut() {
-            Some(p) => p,
-            None => return Vec::new(), // Estado canônico ZERO
-        };
-        let fft = planner.plan_fft_forward(fft_size);
+        // FFT - usando planner fornecido (canônico)
+        let fft = fft_planner.plan_fft_forward(fft_size);
         fft.process(&mut windowed);
-        drop(planner_guard);
 
         // Magnitude spectrum (only positive frequencies)
         let magnitudes: Vec<f64> = windowed
@@ -362,7 +349,8 @@ mod tests {
     #[test]
     fn test_constant_signal_no_pattern() {
         let values = vec![1.0; 100];
-        let analysis = PatternAnalysis::analyze(&values);
+        let mut planner = FftPlanner::new();
+        let analysis = PatternAnalysis::analyze(&values, &mut planner);
         assert!(!analysis.periodicity_detected);
     }
 
@@ -374,7 +362,8 @@ mod tests {
             .map(|i| (2.0 * std::f64::consts::PI * i as f64 / period as f64).sin())
             .collect();
 
-        let analysis = PatternAnalysis::analyze(&values);
+        let mut planner = FftPlanner::new();
+        let analysis = PatternAnalysis::analyze(&values, &mut planner);
 
         // Should have high autocorrelation at period
         assert!(
@@ -403,7 +392,8 @@ mod tests {
             })
             .collect();
 
-        let analysis = PatternAnalysis::analyze(&values);
+        let mut planner = FftPlanner::new();
+        let analysis = PatternAnalysis::analyze(&values, &mut planner);
 
         // Should have relatively low autocorrelation (no clear period)
         // We're lenient here because even "random" signals can have some correlation
@@ -421,7 +411,8 @@ mod tests {
             .map(|i| (2.0 * std::f64::consts::PI * i as f64 / 32.0).sin())
             .collect();
 
-        let analysis = PatternAnalysis::analyze(&values);
+        let mut planner = FftPlanner::new();
+        let analysis = PatternAnalysis::analyze(&values, &mut planner);
         assert!(
             analysis.spectral_flatness < 0.3,
             "Spectral flatness {} should be low for tonal signal",
@@ -432,7 +423,8 @@ mod tests {
     #[test]
     fn test_empty_signal() {
         let values: Vec<f64> = vec![];
-        let analysis = PatternAnalysis::analyze(&values);
+        let mut planner = FftPlanner::new();
+        let analysis = PatternAnalysis::analyze(&values, &mut planner);
         assert!(!analysis.periodicity_detected);
     }
 }

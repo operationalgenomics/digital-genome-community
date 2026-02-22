@@ -192,7 +192,13 @@ impl SensoryCortex {
     /// Thread-safe: Can be called from multiple threads simultaneously.
     /// Stateless: Each call is independent - no memory between calls.
     /// Deterministic: Same input always produces same output.
+    ///
+    /// ## Mudança v1.0.1 Fase 3
+    ///
+    /// FftPlanner agora é criado localmente (sem estado global).
     pub fn perceive(&self, input: &RawInput) -> CortexOutput {
+        use rustfft::FftPlanner;
+        
         let start_time = Self::now_ns();
         let mut history = StateHistory::new(start_time);
 
@@ -215,7 +221,10 @@ impl SensoryCortex {
         // LEVEL 1: PATTERN ANALYSIS
         // ═══════════════════════════════════════════════════════════════════
         history.transition_to(PerceptualState::PerceivingPattern, Self::now_ns());
-        let pattern = PatternAnalysis::analyze(&values);
+        
+        // Criar FFT planner local (canônico - sem estado global)
+        let mut fft_planner = FftPlanner::new();
+        let pattern = PatternAnalysis::analyze(&values, &mut fft_planner);
 
         // ═══════════════════════════════════════════════════════════════════
         // LEVEL 2: STRUCTURE ANALYSIS
