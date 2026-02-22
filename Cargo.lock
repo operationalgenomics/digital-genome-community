@@ -212,7 +212,7 @@ dependencies = [
 
 [[package]]
 name = "digital-genome-community"
-version = "1.0.0-alpha"
+version = "1.0.0"
 dependencies = [
  "bincode",
  "clap",

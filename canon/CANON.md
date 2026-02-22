@@ -1,15 +1,15 @@
 # CANON CONSOLIDADO DO GDC (Genoma Digital Community)
-## VERSÃO 5.1 — FORMALIZAÇÃO MATEMÁTICA E RESOLUÇÃO DE PENDÊNCIAS
+## VERSÃO 5.0 — FECHAMENTO CANÔNICO PARA v1.0.0
 
 ---
 
 ### PREÂMBULO
 
-**Data de Consolidação:** 17 de Fevereiro de 2026  
+**Data de Consolidação:** 14 de Fevereiro de 2026  
 **Status:** CANON CONSOLIDADO — FONTE ÚNICA DE VERDADE  
-**Versão:** 5.1 (Formalização matemática, resolução de bloqueadores e pendências estruturais)  
+**Versão:** 5.0 (Fechamento canônico para v1.0.0)  
 **Natureza:** Documento Constitucional, Autoportante e Não-Interpretativo  
-**Origem:** Canon v5.0 (14/02/2026) + deliberações humanas explícitas de 15-17/02/2026: Especificações CF(G)/Fenótipo, DE/DD, R(Σ)/FCE(R); LEI-EDR-01, LEI-QMN-BORDA-02, LEI-AO-24-04, LEI-AF-14-01; Nota Atrator emendada.
+**Origem:** Fusão canônica de AXIOMAS_LEIS_GDC.md v2.0, PATCH-CANON-2026-01-28-001, BACKLOG_DELIBERACAO.md (itens aprovados), canon/INDEX.md v0.8.5, canon/AO-RESSONANTE.md, GATES_QUANTUM_READY.md
 
 Este documento constitui o **Canon Consolidado** do GDC, unificando todas as fontes canônicas previamente fragmentadas em uma **fonte única de verdade**. Nenhum outro documento pode contradizê-lo.
 
@@ -43,7 +43,7 @@ O sistema satisfaz simultaneamente os cinco critérios de fechamento:
 |--------|----------|------------|
 | **§1** | Axiomas Fundacionais (AF) | AF-1 a AF-17 (17 axiomas) |
 | **§2** | Axiomas Operacionais (AO) | AO-1 a AO-24 + AO-QMN-01 (25 axiomas) |
-| **§3** | Leis Derivadas | ~187 leis |
+| **§3** | Leis Derivadas | ~183 leis |
 | **§3** | Especificações Canônicas | W(Σ), ⊒, CF(G)/Fenótipo, DE/DD, R(Σ)/FCE(R) |
 | **§3** | Notas Canônicas | Atrator Estrutural, Coerência AF-15 |
 | **§4** | Gates de Conformidade | 9 Gates (QM + Patch + QMN) |
@@ -1364,7 +1364,7 @@ A proibição de persistência longa no GDC refere-se à **observação persiste
 
 **Memória Cognitiva Interna (MCI)** é parte do **estado cognitivo ativo** e participa do pipeline; **não constitui Observation** e **não é exportável como dado bruto**.
 
-Esta distinção é fundamental e resolve a tensão entre a necessidade de experiência retida como estado cognitivo (memória) e a proibição de observação interna (AF-7 original).
+Esta distinção é fundamental e resolve a tensão entre a necessidade de experiência acumulada (memória) e a proibição de observação interna (AF-7 original).
 
 ### **Alcance**
 
@@ -2540,10 +2540,9 @@ A MCI é consultada durante o estágio de **Avaliação Quadrimotora (E3)**, for
 
 ### **Consequências Diretas**
 
-* Sem MCI não existe experiência retida entre ciclos avaliativos
+* Sem MCI não existe experiência acumulada
 * Com MCI existe experiência sem violar a externalidade da Observation
-* O GDC pode incorporar conhecimento ao longo da sua continuidade de identidade cognitiva — a retenção é propriedade emergente dessa continuidade, não definição de subsistema de armazenamento persistente
-* A forma de sustentação material da MCI (RAM, serialização, snapshot) é decisão de engenharia, não matéria axiomática
+* O GDC pode acumular conhecimento ao longo do tempo
 
 ### **Proibições Explícitas**
 
@@ -6423,13 +6422,13 @@ PARA TODA instrução I no GDC:
 # §6: REGISTRO DE FECHAMENTO E HISTÓRICO
 # ═══════════════════════════════════════════════════════════════════
 
-## A. Inventário Consolidado v5.1
+## A. Inventário Consolidado v5.0
 
 | Camada | Conteúdo | Quantidade |
 |--------|----------|------------|
 | **§1** | Axiomas Fundacionais (AF) | AF-1 a AF-17 (17 axiomas) |
 | **§2** | Axiomas Operacionais (AO) | AO-1 a AO-24 + AO-QMN-01 (25 axiomas) |
-| **§3** | Leis Derivadas | ~187 leis |
+| **§3** | Leis Derivadas | ~183 leis |
 | **§3** | Especificações Canônicas | W(Σ), ⊒, CF(G)/Fenótipo, DE/DD, R(Σ)/FCE(R) |
 | **§3** | Notas Canônicas | Atrator Estrutural, Coerência AF-15 |
 | **§4** | Gates de Conformidade | 9 Gates |
@@ -6437,7 +6436,7 @@ PARA TODA instrução I no GDC:
 
 ---
 
-## B. Registro de Promoções (v3.0 + v3.1 + v4.0 + v5.0 + v5.1)
+## B. Registro de Promoções (v3.0 + v3.1 + v4.0 + v5.0)
 
 | ID Original | ID Final | Origem | Decisão |
 |-------------|----------|--------|---------|
@@ -6470,14 +6469,6 @@ PARA TODA instrução I no GDC:
 | *(v5.0)* LAB-AX-02/03 | **Nota Canônica** | Delib. 14/02/2026 | Cognição como Atrator Estrutural |
 | *(v5.0)* — | **Espec. W(Σ)** | Delib. 14/02/2026 | Trabalho Estrutural Derivado do Estímulo |
 | *(v5.0)* — | **Espec. ⊒** | Delib. 14/02/2026 | Contenção por Completude de Tecelagem |
-| *(v5.1)* LAB-AX-04 | **Espec. CF(G)/Fenótipo** | Delib. 15/02/2026 | Canonical Form e Fenótipo do DNA Sintético |
-| *(v5.1)* LAB-AX-05 | **Espec. DE/DD** | Delib. 15/02/2026 | Domínio Estrutural e Domínio Dinâmico |
-| *(v5.1)* E-04 | **Espec. R(Σ)/FCE(R)** | Delib. 15/02/2026 | Resultado Cognitivo + Forma Canônica Estrutural |
-| *(v5.1)* — | **LEI-EDR-01** | Delib. 15/02/2026 | Transporte Cognitivo Estrutural + Integridade EDR |
-| *(v5.1)* E-01/E-02 | **LEI-QMN-BORDA-02** | Delib. 15/02/2026 | Meta-Protocolo de Integração Estrutural |
-| *(v5.1)* E-03 | **LEI-AO-24-04** | Delib. 17/02/2026 | Agnosticismo Estrutural de Rede + Isolamento de Camadas |
-| *(v5.1)* E-05 | **LEI-AF-14-01** | Delib. 17/02/2026 | Adapter Estrutural Canônico Trans-Kingdom |
-| *(v5.1)* — | **Nota Atrator** emendada | Delib. 15/02/2026 | Pertencimento = igualdade de CF(G), não distância |
 
 ---
 

@@ -287,7 +287,7 @@ Resultado final de uma cognição completa. Emitido exclusivamente pela Rainha a
 
 ## MCI — Memória Cognitiva Interna
 
-Estado cognitivo ativo do GDC (AF-12), ontologicamente pertencente à entidade cognitiva. Não é observation externa, base de dados nem subsistema de armazenamento — é parte viva da cognição. A MCI retém experiência enquanto a identidade cognitiva válida perdurar; a capacidade de acumular conhecimento ao longo do tempo é propriedade emergente da continuidade de identidade, não definição de infraestrutura persistente. A forma de sustentação material desse estado (RAM, snapshot, serialização para replay) é decisão de engenharia, não matéria axiomática. Exportação ou acesso externo é proibido (LEI-AF-12-03).
+Estado cognitivo persistente do GDC (AF-12). Não é observation externa nem base de dados — é parte ativa da cognição. A MCI acumula experiência e influencia processamento futuro. É permitida como estado interno; exportação ou acesso externo é proibido.
 
 **Distinção canônica (AF-7 emendado v2.0):**
 - Observation **externa** do core → PROIBIDA
@@ -295,7 +295,7 @@ Estado cognitivo ativo do GDC (AF-12), ontologicamente pertencente à entidade c
 
 ## Aprendizado Autônomo
 
-Capacidade do GDC de aprender com experiência sem reprogramação (AF-11). O GDC evolui por incorporação de Códons na MCI, não por atualização de código. A MCI cresce enquanto a identidade cognitiva válida perdurar. Aprendizado é exploratório (LEI-AF-11-01) mas subordinado à soberania humana sobre o Canon (AF-8).
+Capacidade do GDC de aprender com experiência sem reprogramação (AF-11). O GDC evolui por acumulação na MCI, não por atualização de código. Aprendizado é exploratório (LEI-AF-11-01) mas subordinado à soberania humana sobre o Canon (AF-8).
 
 ## Replay Determinístico
 

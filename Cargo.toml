@@ -1,6 +1,6 @@
 [package]
 name = "digital-genome-community"
-version = "1.0.0-alpha"
+version = "1.0.0"
 edition = "2021"
 authors = ["Carlos Eduardo Favini"]
 license = "Apache-2.0"

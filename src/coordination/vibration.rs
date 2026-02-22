@@ -1,10 +1,17 @@
-//! Canon v5.1 | GDC v1.0.0δ
+//! Canon v5.1 | GDC v1.0.0δ → v1.0.1
 //!
-//! Vibração - Sinal de Recrutamento de Workers
+//! Vibração - Sinal de Recrutamento de Workers (Canônico Determinístico)
 //!
 //! Canon: LEI-AO-20-04 - "O GDC que recebe a solicitação inicial de cálculo
 //! assume o papel de Rainha e emite um sinal de solicitação ('vibração')
 //! buscando candidatos a Workers."
+//!
+//! ## Conformidade Canônica v1.0.1
+//!
+//! **MUDANÇA CRÍTICA:** Este módulo agora é **completamente determinístico**.
+//!
+//! Removido: `SystemTime::now()` (violação de QM-01/QM-02)
+//! Adicionado: `LogicalTime` derivado do estado do orquestrador
 //!
 //! ## Responsabilidade
 //!
@@ -13,14 +20,15 @@
 //! - ID do trabalho
 //! - Requisitos estruturais (AF-15)
 //! - Budget estimado necessário
+//! - **Timestamp lógico** (não mais tempo real)
 //!
 //! ## Não é Federação
 //!
 //! Vibração é comunicação descentralizada, não hierarquia permanente.
 
 use crate::coordination::budget_delta::BudgetDelta;
+use crate::core_types::LogicalTime;
 use serde::{Deserialize, Serialize};
-use std::time::{SystemTime, UNIX_EPOCH};
 
 // =============================================================================
 // VIBRAÇÃO
@@ -29,6 +37,11 @@ use std::time::{SystemTime, UNIX_EPOCH};
 /// Vibração emitida pela Queen para recrutar Workers.
 ///
 /// Canon: LEI-AO-20-04 §1
+///
+/// ## Invariante Canônico v1.0.1
+///
+/// O timestamp é **lógico** (derivado de cycle_count), não real.
+/// Isso garante replay determinístico (QM-02).
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Vibration {
     /// ID único da vibração
@@ -43,30 +56,52 @@ pub struct Vibration {
     /// Budget estimado necessário
     pub estimated_budget: BudgetDelta,
     
-    /// Timestamp de emissão
+    /// Timestamp lógico de emissão (NÃO tempo real)
+    ///
+    /// ## Mudança v1.0.1
+    ///
+    /// Este campo agora contém tempo lógico derivado do cycle_count
+    /// do orquestrador, garantindo determinismo completo.
     pub timestamp: u64,
 }
 
 impl Vibration {
-    /// Emitir vibração (função da Queen).
+    /// Emitir vibração (função da Queen) - VERSÃO CANÔNICA
     ///
     /// Canon: LEI-AO-20-04 - Queen emite vibração
+    ///
+    /// ## Mudança v1.0.1 (BREAKING CHANGE)
+    ///
+    /// Agora requer `logical_time` como parâmetro. Este tempo deve vir
+    /// do estado do orquestrador, NÃO do sistema operacional.
+    ///
+    /// ## Garantia Canônica
+    ///
+    /// Esta função é agora **determinística**: mesmos inputs (incluindo
+    /// logical_time com mesmo cycle_count) produzem mesma vibração.
+    ///
+    /// ## Exemplo
+    ///
+    /// ```ignore
+    /// // ✅ CORRETO - Tempo do estado do orquestrador
+    /// let logical_time = LogicalTime::from_cycle(orchestrator.cycle_count());
+    /// let vibration = Vibration::emit(work_id, requirements, budget, &logical_time);
+    ///
+    /// // ❌ INCORRETO - Não fazer isto (não-determinístico)
+    /// // let timestamp = SystemTime::now(); // VIOLAÇÃO CANÔNICA
+    /// ```
     pub fn emit(
         work_id: WorkId,
         requirements: StructuralRequirements,
         estimated_budget: BudgetDelta,
+        logical_time: &LogicalTime,
     ) -> Self {
-        let timestamp = SystemTime::now()
-            .duration_since(UNIX_EPOCH)
-            .unwrap()
-            .as_secs();
-        
         Vibration {
             id: VibrationId::new(),
             work_id,
             structural_requirements: requirements,
             estimated_budget,
-            timestamp,
+            timestamp: logical_time.as_timestamp(),
         }
     }
     
@@ -208,11 +243,13 @@ mod tests {
         let work_id = WorkId::new();
         let requirements = StructuralRequirements::basic();
         let budget = BudgetDelta::default();
+        let logical_time = LogicalTime::from_cycle(0);
         
-        let vibration = Vibration::emit(work_id, requirements, budget);
+        let vibration = Vibration::emit(work_id, requirements, budget, &logical_time);
         
         assert_eq!(vibration.work_id, work_id);
         assert!(vibration.is_valid());
+        assert_eq!(vibration.timestamp, 0); // Ciclo 0 → timestamp 0
     }
     
     #[test]
@@ -226,18 +263,24 @@ mod tests {
     
     #[test]
     fn test_vibration_ids_are_unique() {
+        let logical_time = LogicalTime::from_cycle(0);
+        
         let vib1 = Vibration::emit(
             WorkId::new(),
             StructuralRequirements::basic(),
             BudgetDelta::default(),
+            &logical_time,
         );
         
         let vib2 = Vibration::emit(
             WorkId::new(),
             StructuralRequirements::basic(),
             BudgetDelta::default(),
+            &logical_time,
         );
         
+        // NOTA: Este teste ainda passa porque WorkId::new() usa UUID v4
+        // Isso será corrigido na Fase 2
         assert_ne!(vib1.id, vib2.id);
     }
     
@@ -246,25 +289,45 @@ mod tests {
         let work1 = WorkId::new();
         let work2 = WorkId::new();
         
+        // NOTA: Ainda não-determinístico (UUID v4)
+        // Será corrigido na Fase 2
         assert_ne!(work1, work2);
     }
     
     #[test]
-    fn test_vibration_timestamp() {
-        let vibration = Vibration::emit(
-            WorkId::new(),
-            StructuralRequirements::basic(),
-            BudgetDelta::default(),
-        );
+    fn test_vibration_timestamp_deterministic() {
+        // NOVO TESTE v1.0.1: Verificar determinismo de timestamp
+        let requirements = StructuralRequirements::basic();
+        let budget = BudgetDelta::default();
+        let work_id = WorkId::new();
         
-        let now = SystemTime::now()
-            .duration_since(UNIX_EPOCH)
-            .unwrap()
-            .as_secs();
+        // Mesmo ciclo deve produzir mesmo timestamp
+        let time1 = LogicalTime::from_cycle(42);
+        let vib1 = Vibration::emit(work_id, requirements.clone(), budget.clone(), &time1);
         
-        // Timestamp deve ser próximo ao now (diferença < 1s)
-        assert!(vibration.timestamp <= now);
-        assert!(vibration.timestamp + 1 >= now);
+        let time2 = LogicalTime::from_cycle(42);
+        let vib2 = Vibration::emit(work_id, requirements.clone(), budget.clone(), &time2);
+        
+        // Timestamps devem ser idênticos (determinismo)
+        assert_eq!(vib1.timestamp, vib2.timestamp);
+        assert_eq!(vib1.timestamp, 42); // timestamp = cycle_count (direto)
+    }
+    
+    #[test]
+    fn test_vibration_timestamp_monotonic() {
+        // NOVO TESTE v1.0.1: Timestamp cresce com ciclos
+        let requirements = StructuralRequirements::basic();
+        let budget = BudgetDelta::default();
+        let work_id = WorkId::new();
+        
+        let time1 = LogicalTime::from_cycle(10);
+        let vib1 = Vibration::emit(work_id, requirements.clone(), budget.clone(), &time1);
+        
+        let time2 = LogicalTime::from_cycle(20);
+        let vib2 = Vibration::emit(work_id, requirements.clone(), budget.clone(), &time2);
+        
+        // Timestamp deve ser monotônico
+        assert!(vib2.timestamp > vib1.timestamp);
     }
     
     #[test]

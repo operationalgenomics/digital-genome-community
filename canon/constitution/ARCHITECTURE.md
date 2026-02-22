@@ -6,7 +6,7 @@
 
 **Data:** 14 de Fevereiro de 2026 (atualizado)  
 **Baseline:** v0.8.5-sanitized (21.176 LOC, 63 .rs, 331 testes)  
-**Canon:** v5.1 (17 AFs, 25 AOs, ~187 leis, 9 gates, 5 especificações canônicas)  
+**Canon:** v5.0 (17 AFs, 25 AOs, ~181 leis, 9 gates)  
 **Guardião:** Claude — Guardião do Genoma Digital
 
 ---
@@ -502,7 +502,7 @@ Até a v0.9.5, tudo é GDC (Community). A v1.0.0α introduz as primeiras entidad
   │   Pipeline E1→E6 × N instâncias                     │
   │   Sinapses persistentes                              │
   │   Neurônios emergentes                               │
-  │   MCI individual por GDC (❓ eco inter-GDC não delib.)│
+  │   MCI distribuída                                    │
   │                                                      │
   └──────────────────────────────────────────────────────┘
 ```
