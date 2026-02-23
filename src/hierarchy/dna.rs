@@ -181,7 +181,7 @@ impl GoldenDna {
         let craft_performance = motor_scores.calculate_cp();
 
         Self {
-            id: DnaId::new(),
+            id: DnaId::new_deterministic(b"test-dna"),
             action_sequence,
             craft_performance,
             motor_scores,

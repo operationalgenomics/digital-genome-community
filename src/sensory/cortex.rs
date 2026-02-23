@@ -539,7 +539,11 @@ impl SensoryCortex {
         )
     }
 
-    /// Returns current timestamp in nanoseconds
+    /// Returns current timestamp in nanoseconds.
+    /// 
+    /// **NOTA CANÔNICA:** Este timestamp é usado APENAS para tracking de performance
+    /// e histórico de estados (não para geração de IDs ou lógica determinística).
+    /// Para lógica determinística, use `LogicalTime` em vez de wall-clock time.
     fn now_ns() -> u64 {
         SystemTime::now()
             .duration_since(UNIX_EPOCH)

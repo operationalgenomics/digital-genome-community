@@ -289,9 +289,10 @@ mod tests {
     fn test_synaptic_graph_basic() {
         let mut graph = SynapticGraph::new();
 
-        let dna1 = DnaId::new();
-        let dna2 = DnaId::new();
-        let synapse = SynapseId::new();
+        // v1.0.1: Seeds diferentes para IDs diferentes
+        let dna1 = DnaId::new_deterministic(b"test-dna-1");
+        let dna2 = DnaId::new_deterministic(b"test-dna-2");
+        let synapse = SynapseId::new_deterministic(b"test-synapse");
 
         graph.record_connection(dna1, synapse);
         graph.record_connection(dna2, synapse);
@@ -305,8 +306,9 @@ mod tests {
     fn test_neuronal_graph_basic() {
         let mut graph = NeuronalGraph::new();
 
-        let n1 = NeuronId::new();
-        let n2 = NeuronId::new();
+        // v1.0.1: Seeds diferentes para IDs diferentes
+        let n1 = NeuronId::new_deterministic(b"test-neuron-1");
+        let n2 = NeuronId::new_deterministic(b"test-neuron-2");
 
         let result = graph.record_connection(n1, n2, 0.8);
 
@@ -320,8 +322,8 @@ mod tests {
     fn test_invalid_weight_rejected() {
         let mut graph = NeuronalGraph::new();
 
-        let n1 = NeuronId::new();
-        let n2 = NeuronId::new();
+        let n1 = NeuronId::new_deterministic(b"test-neuron");
+        let n2 = NeuronId::new_deterministic(b"test-neuron");
 
         let result = graph.record_connection(n1, n2, 1.5);
 
@@ -332,8 +334,8 @@ mod tests {
     fn test_nan_weight_rejected() {
         let mut graph = NeuronalGraph::new();
 
-        let n1 = NeuronId::new();
-        let n2 = NeuronId::new();
+        let n1 = NeuronId::new_deterministic(b"test-neuron");
+        let n2 = NeuronId::new_deterministic(b"test-neuron");
 
         let result = graph.record_connection(n1, n2, f64::NAN);
 
@@ -344,8 +346,8 @@ mod tests {
     fn test_clamped_mode() {
         let mut graph = NeuronalGraph::new();
 
-        let n1 = NeuronId::new();
-        let n2 = NeuronId::new();
+        let n1 = NeuronId::new_deterministic(b"test-neuron");
+        let n2 = NeuronId::new_deterministic(b"test-neuron");
 
         let (was_clamped, effective) = graph.record_connection_clamped(n1, n2, 1.5);
 
@@ -358,8 +360,8 @@ mod tests {
     fn test_valid_weight_not_clamped() {
         let mut graph = NeuronalGraph::new();
 
-        let n1 = NeuronId::new();
-        let n2 = NeuronId::new();
+        let n1 = NeuronId::new_deterministic(b"test-neuron");
+        let n2 = NeuronId::new_deterministic(b"test-neuron");
 
         let (was_clamped, effective) = graph.record_connection_clamped(n1, n2, 0.7);
 

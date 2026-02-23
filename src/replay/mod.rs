@@ -54,7 +54,6 @@
 
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
-use std::time::{SystemTime, UNIX_EPOCH};
 
 use crate::core_types::{ActionId, DnaId};
 
@@ -168,10 +167,9 @@ impl ReplayEvent {
         score: f64,
         valid: bool,
     ) -> Self {
-        let timestamp_ns = SystemTime::now()
-            .duration_since(UNIX_EPOCH)
-            .map(|d| d.as_nanos() as u64)
-            .unwrap_or(0);
+        // Timestamp determinístico baseado em sequence
+        // (para replay, sequence JÁ representa ordem temporal)
+        let timestamp_ns = sequence;
 
         Self {
             sequence,
@@ -230,16 +228,11 @@ pub struct ReplayContext {
 }
 
 impl ReplayContext {
-    /// Creates a new replay context with a random session ID.
+    /// Creates a new replay context with a deterministic session ID.
+    /// 
+    /// **CANONICAL:** Usa seed default determin para garantir replay determinístico.
     pub fn new() -> Self {
-        Self {
-            session_id: format!("session-{}", uuid::Uuid::new_v4()),
-            seed: Vec::new(),
-            sequence_counter: 0,
-            replay_mode: false,
-            events: Vec::new(),
-            anomaly_counts: BTreeMap::new(),
-        }
+        Self::from_seed(b"default-replay-context")
     }
 
     /// Creates a deterministic replay context from a seed.

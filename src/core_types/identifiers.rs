@@ -70,13 +70,12 @@ fn type_namespace(type_name: &str) -> Uuid {
 pub struct ActionId(pub Uuid);
 
 impl ActionId {
-    /// Creates a new random ActionId (non-deterministic).
-    pub fn new() -> Self {
-        Self(Uuid::new_v4())
-    }
-
     /// Creates a deterministic ActionId from a seed.
     /// Same seed always produces the same ID.
+    ///
+    /// ## Mudança v1.0.1 Fase 2
+    ///
+    /// Agora também disponível via `from_canonical()` usando CanonicalId.
     ///
     /// # Example
     /// ```
@@ -88,6 +87,17 @@ impl ActionId {
     pub fn new_deterministic(seed: &[u8]) -> Self {
         let namespace = type_namespace("ActionId");
         Self(Uuid::new_v5(&namespace, seed))
+    }
+    
+    /// Creates ActionId from CanonicalId (v1.0.1 Fase 2).
+    ///
+    /// ## Uso Canônico
+    ///
+    /// Permite criar ActionId a partir de CanonicalId determinístico.
+    pub fn from_canonical(canonical_id: &super::CanonicalId) -> Self {
+        // Usar bytes do CanonicalId como UUID
+        let bytes = canonical_id.as_bytes();
+        Self(Uuid::from_bytes(*bytes))
     }
 
     /// Creates an ActionId from an existing UUID.
@@ -101,22 +111,11 @@ impl ActionId {
     }
 }
 
-impl Default for ActionId {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
 /// Unique identifier for a DNA strand.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct DnaId(pub Uuid);
 
 impl DnaId {
-    /// Creates a new random DnaId (non-deterministic).
-    pub fn new() -> Self {
-        Self(Uuid::new_v4())
-    }
-
     /// Creates a deterministic DnaId from a seed.
     pub fn new_deterministic(seed: &[u8]) -> Self {
         let namespace = type_namespace("DnaId");
@@ -134,22 +133,11 @@ impl DnaId {
     }
 }
 
-impl Default for DnaId {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
 /// Unique identifier for a synapse.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct SynapseId(pub Uuid);
 
 impl SynapseId {
-    /// Creates a new random SynapseId (non-deterministic).
-    pub fn new() -> Self {
-        Self(Uuid::new_v4())
-    }
-
     /// Creates a deterministic SynapseId from a seed.
     pub fn new_deterministic(seed: &[u8]) -> Self {
         let namespace = type_namespace("SynapseId");
@@ -167,22 +155,11 @@ impl SynapseId {
     }
 }
 
-impl Default for SynapseId {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
 /// Unique identifier for a neuron.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct NeuronId(pub Uuid);
 
 impl NeuronId {
-    /// Creates a new random NeuronId (non-deterministic).
-    pub fn new() -> Self {
-        Self(Uuid::new_v4())
-    }
-
     /// Creates a deterministic NeuronId from a seed.
     pub fn new_deterministic(seed: &[u8]) -> Self {
         let namespace = type_namespace("NeuronId");
@@ -200,22 +177,11 @@ impl NeuronId {
     }
 }
 
-impl Default for NeuronId {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
 /// Unique identifier for a brain instance.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct BrainId(pub Uuid);
 
 impl BrainId {
-    /// Creates a new random BrainId (non-deterministic).
-    pub fn new() -> Self {
-        Self(Uuid::new_v4())
-    }
-
     /// Creates a deterministic BrainId from a seed.
     pub fn new_deterministic(seed: &[u8]) -> Self {
         let namespace = type_namespace("BrainId");
@@ -230,12 +196,6 @@ impl BrainId {
     /// Returns the inner UUID.
     pub fn as_uuid(&self) -> &Uuid {
         &self.0
-    }
-}
-
-impl Default for BrainId {
-    fn default() -> Self {
-        Self::new()
     }
 }
 
@@ -293,10 +253,11 @@ mod tests {
 
     #[test]
     fn test_random_ids_are_different() {
-        let id1 = ActionId::new();
-        let id2 = ActionId::new();
+        // v1.0.1: IDs determinísticos com seeds diferentes → IDs diferentes
+        let id1 = ActionId::new_deterministic(b"test-action-1");
+        let id2 = ActionId::new_deterministic(b"test-action-2");
 
-        assert_ne!(id1, id2, "Random IDs should be different");
+        assert_ne!(id1, id2, "Different seeds should produce different IDs");
     }
 
     #[test]

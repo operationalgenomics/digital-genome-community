@@ -449,7 +449,8 @@ mod tests {
     fn test_become_worker() {
         let mut gdc = Gdc::isolated(b"secret");
         let event = create_test_event();
-        let queen_id = Uuid::new_v4();
+        // UUID fixo para testes (namespace DNS + "test-queen")
+        let queen_id = Uuid::new_v5(&Uuid::NAMESPACE_DNS, b"test-queen");
         
         let result = gdc.become_worker(event, queen_id);
         
@@ -465,7 +466,8 @@ mod tests {
         gdc.become_queen(event.clone()).unwrap();
         
         // Não pode virar worker quando já é rainha
-        let result = gdc.become_worker(event, Uuid::new_v4());
+        let queen_id = Uuid::new_v5(&Uuid::NAMESPACE_DNS, b"test-queen");
+        let result = gdc.become_worker(event, queen_id);
         
         assert!(matches!(result, Err(StateTransitionError::InvalidTransition { .. })));
     }
@@ -475,7 +477,8 @@ mod tests {
         let mut gdc = Gdc::isolated(b"secret");
         let event = create_test_event();
         
-        gdc.become_worker(event.clone(), Uuid::new_v4()).unwrap();
+        let queen_id = Uuid::new_v5(&Uuid::NAMESPACE_DNS, b"test-queen");
+        gdc.become_worker(event.clone(), queen_id).unwrap();
         
         let edr = gdc.process_work(|e| {
             Manifestation::for_call(*e.call_signature())

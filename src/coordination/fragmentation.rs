@@ -175,19 +175,31 @@ impl ChunkId {
     }
 }
 
-/// ID de worker.
+/// ID de worker (canônico determinístico).
+///
+/// ## Mudança v1.0.1 Fase 2
+///
+/// Agora usa CanonicalId internamente (SHA-256 determinístico).
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq, Hash)]
-pub struct WorkerId(uuid::Uuid);
+pub struct WorkerId(crate::core_types::CanonicalId);
 
 impl WorkerId {
-    pub fn new() -> Self {
-        WorkerId(uuid::Uuid::new_v4())
-    }
-}
-
-impl Default for WorkerId {
-    fn default() -> Self {
-        Self::new()
+    /// Criar ID canônico a partir do índice do worker.
+    ///
+    /// ## Parâmetros
+    ///
+    /// - `worker_index`: Índice do worker no pool
+    /// - `sequence`: Contador sequencial do ciclo (determinístico)
+    ///
+    /// ## Garantia Canônica
+    ///
+    /// Mesmo índice e sequência sempre produzem mesmo WorkerId.
+    pub fn from_worker_index(worker_index: usize, sequence: u64) -> Self {
+        WorkerId(crate::core_types::CanonicalId::from_context(
+            "worker",
+            &worker_index.to_le_bytes(),
+            sequence,
+        ))
     }
 }
 
@@ -201,7 +213,7 @@ mod tests {
     
     #[test]
     fn test_fragmentation_basic() {
-        let work_id = WorkId::new();
+        let work_id = WorkId::from_stimulus(b"test-work", 0);
         let stimulus = vec![1, 2, 3, 4, 5, 6, 7, 8];
         let budgets = HashMap::new();
         
@@ -240,7 +252,7 @@ mod tests {
     
     #[test]
     fn test_verify_all_self_contained() {
-        let work_id = WorkId::new();
+        let work_id = WorkId::from_stimulus(b"test-work", 0);
         let stimulus = vec![1, 2, 3, 4];
         let budgets = HashMap::new();
         
@@ -251,7 +263,7 @@ mod tests {
     
     #[test]
     fn test_empty_stimulus() {
-        let work_id = WorkId::new();
+        let work_id = WorkId::from_stimulus(b"test-work", 0);
         let stimulus = vec![];
         let budgets = HashMap::new();
         

@@ -69,7 +69,7 @@ impl Synapse {
     /// A new Synapse with no inferred domain.
     pub fn new(connected_dna: Vec<DnaId>, initial_strength: f64) -> Self {
         Self {
-            id: SynapseId::new(),
+            id: SynapseId::new_deterministic(b"test-synapse"),
             connected_dna,
             strength: initial_strength.clamp(0.0, 1.0),
             inferred_domain: None,

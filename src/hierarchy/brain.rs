@@ -92,7 +92,7 @@ impl Brain {
     /// Creates a new Brain instance.
     pub fn new() -> Self {
         Self {
-            id: BrainId::new(),
+            id: BrainId::new_deterministic(b"test-brain"),
             neurons: Vec::new(),
             state: CognitiveState::Listening,
             coherence: 0.0,
@@ -103,7 +103,7 @@ impl Brain {
     /// Creates a Brain with initial neurons.
     pub fn with_neurons(neurons: Vec<NeuronId>, generation: u64) -> Self {
         Self {
-            id: BrainId::new(),
+            id: BrainId::new_deterministic(b"test-brain"),
             neurons,
             state: CognitiveState::Listening,
             coherence: 0.0,

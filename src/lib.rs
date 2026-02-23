@@ -543,7 +543,8 @@ mod canonical_sanitization_tests {
         let event = Event::from_work(work);
         
         // Tornar-se worker
-        worker.become_worker(event.clone(), uuid::Uuid::new_v4()).unwrap();
+        let queen_id = uuid::Uuid::new_v5(&uuid::Uuid::NAMESPACE_DNS, b"test-queen");
+        worker.become_worker(event.clone(), queen_id).unwrap();
         assert_eq!(worker.state(), GdcState::Worker);
         
         // Worker NÃO pode emitir DNA

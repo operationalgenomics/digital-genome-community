@@ -121,9 +121,9 @@ impl ObservedAction {
         context: BTreeMap<String, f64>,
         payload: serde_json::Value,
     ) -> Result<Self, ActionError> {
-        let id = ActionId::new();
-
+        // Usar hash do conteúdo como seed para ID determinístico
         let content_hash = Self::compute_sha256(&source_id, timestamp_ns, &context, &payload)?;
+        let id = ActionId::new_deterministic(content_hash.as_bytes());
 
         Ok(Self {
             id,

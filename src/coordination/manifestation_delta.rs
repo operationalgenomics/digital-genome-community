@@ -14,19 +14,31 @@ use crate::coordination::vibration::{Capability, StructuralRequirements, Vibrati
 use serde::{Deserialize, Serialize};
 use std::collections::HashSet;
 
-/// ID temporário de GDC (substituir por struct real quando disponível)
+/// ID de GDC (canônico determinístico).
+///
+/// ## Mudança v1.0.1 Fase 2
+///
+/// Agora usa CanonicalId internamente (SHA-256 determinístico).
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq, Hash)]
-pub struct GdcId(uuid::Uuid);
+pub struct GdcId(crate::core_types::CanonicalId);
 
 impl GdcId {
-    pub fn new() -> Self {
-        GdcId(uuid::Uuid::new_v4())
-    }
-}
-
-impl Default for GdcId {
-    fn default() -> Self {
-        Self::new()
+    /// Criar ID canônico a partir do hash de estado do GDC.
+    ///
+    /// ## Parâmetros
+    ///
+    /// - `state_hash`: Hash do estado interno do GDC
+    /// - `sequence`: Contador sequencial (determinístico)
+    ///
+    /// ## Garantia Canônica
+    ///
+    /// Mesmo estado e sequência sempre produzem mesmo GdcId.
+    pub fn from_state_hash(state_hash: &[u8], sequence: u64) -> Self {
+        GdcId(crate::core_types::CanonicalId::from_context(
+            "gdc",
+            state_hash,
+            sequence,
+        ))
     }
 }
 
@@ -112,14 +124,14 @@ mod tests {
     #[test]
     fn test_manifestation_delta_compatible() {
         let vibration = Vibration {
-            id: VibrationId::new(),
-            work_id: WorkId::new(),
+            id: VibrationId::from_vibration_data(&StructuralRequirements::basic(), &BudgetDelta::default(), 0),
+            work_id: WorkId::from_stimulus(b"test-work", 0),
             structural_requirements: StructuralRequirements::basic(),
             estimated_budget: BudgetDelta::default(),
             timestamp: 0,
         };
         
-        let gdc_id = GdcId::new();
+        let gdc_id = GdcId::from_state_hash(b"test-gdc", 0);
         let budget = BudgetDelta::default();
         
         let mut capabilities = HashSet::new();

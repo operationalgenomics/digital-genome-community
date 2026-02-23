@@ -96,8 +96,15 @@ impl Vibration {
         estimated_budget: BudgetDelta,
         logical_time: &LogicalTime,
     ) -> Self {
+        // Usar dados da vibração para gerar ID determinístico
+        let id = VibrationId::from_vibration_data(
+            &requirements,
+            &estimated_budget,
+            logical_time.as_timestamp(), // sequence = timestamp (já determinístico)
+        );
+        
         Vibration {
-            id: VibrationId::new(),
+            id,
             work_id,
             structural_requirements: requirements,
             estimated_budget,
@@ -193,40 +200,80 @@ pub enum OntologicalCompatibility {
 }
 
 // =============================================================================
-// IDENTIFICADORES
+// IDENTIFICADORES (v1.0.1 Fase 2 - CANÔNICOS)
 // =============================================================================
 
-/// ID de vibração.
+use crate::core_types::CanonicalId;
+
+/// ID de vibração (canônico determinístico).
+///
+/// ## Mudança v1.0.1 Fase 2
+///
+/// Agora usa CanonicalId internamente (SHA-256 determinístico).
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq, Hash)]
-pub struct VibrationId(uuid::Uuid);
+pub struct VibrationId(CanonicalId);
 
 impl VibrationId {
-    /// Criar novo ID de vibração.
-    pub fn new() -> Self {
-        VibrationId(uuid::Uuid::new_v4())
+    /// Criar ID canônico a partir de dados da vibração.
+    ///
+    /// ## Parâmetros
+    ///
+    /// - `requirements`: Requisitos estruturais
+    /// - `budget`: Budget estimado
+    /// - `sequence`: Contador sequencial do estado (determinístico)
+    ///
+    /// ## Garantia Canônica
+    ///
+    /// Mesmos inputs sempre produzem mesmo ID (QM-02).
+    pub fn from_vibration_data(
+        requirements: &StructuralRequirements,
+        budget: &BudgetDelta,
+        sequence: u64,
+    ) -> Self {
+        let mut payload = Vec::new();
+        
+        // Serializar componentes
+        let req_bytes = bincode::serialize(requirements)
+            .expect("StructuralRequirements must serialize");
+        let budget_bytes = bincode::serialize(budget)
+            .expect("BudgetDelta must serialize");
+        
+        payload.extend_from_slice(&req_bytes);
+        payload.extend_from_slice(&budget_bytes);
+        
+        VibrationId(CanonicalId::from_context(
+            "vibration",
+            &payload,
+            sequence,
+        ))
     }
 }
 
-impl Default for VibrationId {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
-/// ID de trabalho.
+/// ID de trabalho (canônico determinístico).
+///
+/// ## Mudança v1.0.1 Fase 2
+///
+/// Agora usa CanonicalId internamente (SHA-256 determinístico).
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq, Hash)]
-pub struct WorkId(uuid::Uuid);
+pub struct WorkId(CanonicalId);
 
 impl WorkId {
-    /// Criar novo ID de trabalho.
-    pub fn new() -> Self {
-        WorkId(uuid::Uuid::new_v4())
-    }
-}
-
-impl Default for WorkId {
-    fn default() -> Self {
-        Self::new()
+    /// Criar ID canônico a partir do estímulo.
+    ///
+    /// ## Parâmetros
+    ///
+    /// - `stimulus`: Bytes do estímulo que define o trabalho
+    /// - `sequence`: Contador sequencial do estado (determinístico)
+    ///
+    /// ## Garantia Canônica
+    ///
+    /// Mesmo estímulo e sequência sempre produzem mesmo WorkId.
+    pub fn from_stimulus(stimulus: &[u8], sequence: u64) -> Self {
+        WorkId(CanonicalId::from_context(
+            "work",
+            stimulus,
+            sequence,
+        ))
     }
 }
 
@@ -240,7 +287,7 @@ mod tests {
     
     #[test]
     fn test_vibration_creation() {
-        let work_id = WorkId::new();
+        let work_id = WorkId::from_stimulus(b"test-work", 0);
         let requirements = StructuralRequirements::basic();
         let budget = BudgetDelta::default();
         let logical_time = LogicalTime::from_cycle(0);
@@ -263,35 +310,39 @@ mod tests {
     
     #[test]
     fn test_vibration_ids_are_unique() {
-        let logical_time = LogicalTime::from_cycle(0);
+        // v1.0.1: IDs determinísticos - timestamps diferentes → VibrationIds diferentes
+        let time1 = LogicalTime::from_cycle(0);
+        let time2 = LogicalTime::from_cycle(1);
         
         let vib1 = Vibration::emit(
-            WorkId::new(),
+            WorkId::from_stimulus(b"test-work", 0),
             StructuralRequirements::basic(),
             BudgetDelta::default(),
-            &logical_time,
+            &time1,
         );
         
         let vib2 = Vibration::emit(
-            WorkId::new(),
+            WorkId::from_stimulus(b"test-work", 0),
             StructuralRequirements::basic(),
             BudgetDelta::default(),
-            &logical_time,
+            &time2,
         );
         
-        // NOTA: Este teste ainda passa porque WorkId::new() usa UUID v4
-        // Isso será corrigido na Fase 2
+        // IDs diferentes porque timestamp (sequence) é diferente
         assert_ne!(vib1.id, vib2.id);
     }
     
     #[test]
     fn test_work_ids_are_unique() {
-        let work1 = WorkId::new();
-        let work2 = WorkId::new();
+        // Sequências diferentes → IDs diferentes (determinístico)
+        let work1 = WorkId::from_stimulus(b"stimulus1", 0);
+        let work2 = WorkId::from_stimulus(b"stimulus2", 0);
         
-        // NOTA: Ainda não-determinístico (UUID v4)
-        // Será corrigido na Fase 2
         assert_ne!(work1, work2);
+        
+        // Mesma sequência mas estímulos diferentes
+        let work3 = WorkId::from_stimulus(b"stimulus1", 1);
+        assert_ne!(work1, work3);
     }
     
     #[test]
@@ -299,7 +350,7 @@ mod tests {
         // NOVO TESTE v1.0.1: Verificar determinismo de timestamp
         let requirements = StructuralRequirements::basic();
         let budget = BudgetDelta::default();
-        let work_id = WorkId::new();
+        let work_id = WorkId::from_stimulus(b"test_stimulus", 0);
         
         // Mesmo ciclo deve produzir mesmo timestamp
         let time1 = LogicalTime::from_cycle(42);
@@ -318,7 +369,7 @@ mod tests {
         // NOVO TESTE v1.0.1: Timestamp cresce com ciclos
         let requirements = StructuralRequirements::basic();
         let budget = BudgetDelta::default();
-        let work_id = WorkId::new();
+        let work_id = WorkId::from_stimulus(b"test_stimulus", 0);
         
         let time1 = LogicalTime::from_cycle(10);
         let vib1 = Vibration::emit(work_id, requirements.clone(), budget.clone(), &time1);
@@ -352,5 +403,36 @@ mod tests {
             },
             _ => panic!("Expected Specific"),
         }
+    }
+    
+    #[test]
+    fn test_vibration_id_deterministic() {
+        // v1.0.1 Fase 2: IDs canônicos são determinísticos
+        let req = StructuralRequirements::basic();
+        let budget = BudgetDelta::default();
+        
+        // Mesmos inputs → mesmo ID
+        let id1 = VibrationId::from_vibration_data(&req, &budget, 0);
+        let id2 = VibrationId::from_vibration_data(&req, &budget, 0);
+        assert_eq!(id1, id2);
+        
+        // Sequências diferentes → IDs diferentes
+        let id3 = VibrationId::from_vibration_data(&req, &budget, 1);
+        assert_ne!(id1, id3);
+    }
+    
+    #[test]
+    fn test_work_id_deterministic() {
+        // v1.0.1 Fase 2: IDs canônicos são determinísticos
+        let stimulus = b"test_stimulus";
+        
+        // Mesmo estímulo e sequência → mesmo ID
+        let id1 = WorkId::from_stimulus(stimulus, 0);
+        let id2 = WorkId::from_stimulus(stimulus, 0);
+        assert_eq!(id1, id2);
+        
+        // Estímulos diferentes → IDs diferentes
+        let id3 = WorkId::from_stimulus(b"different", 0);
+        assert_ne!(id1, id3);
     }
 }

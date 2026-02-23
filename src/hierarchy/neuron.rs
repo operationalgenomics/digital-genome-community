@@ -62,7 +62,7 @@ impl Neuron {
     /// Creates a new neuron.
     pub fn new() -> Self {
         Self {
-            id: NeuronId::new(),
+            id: NeuronId::new_deterministic(b"test-neuron"),
             input_synapses: Vec::new(),
             output_synapses: Vec::new(),
             activation: 0.0,
@@ -74,7 +74,7 @@ impl Neuron {
     /// Creates a neuron with initial input synapses.
     pub fn with_inputs(input_synapses: Vec<SynapseId>) -> Self {
         Self {
-            id: NeuronId::new(),
+            id: NeuronId::new_deterministic(b"test-neuron"),
             input_synapses,
             output_synapses: Vec::new(),
             activation: 0.0,
